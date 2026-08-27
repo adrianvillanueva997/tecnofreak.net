@@ -43,8 +43,9 @@
   --breakpoint-lg: 64rem;
   --breakpoint-xl: 80rem;
   --breakpoint-2xl: 86rem;
-  --font-mono: var(--font-geist-mono);
-  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-plex-mono);
+  --font-sans: var(--font-plex-sans);
+  --font-display: var(--font-space-grotesk);
 }
 
 @layer utilities {
@@ -214,11 +215,191 @@
   }
 }
 
-html {
-  opacity: 0;
+/* ==========================================================================
+   tecnofreak.net design tokens (portada estilo TechCrunch / Hipertextual)
+   ========================================================================== */
+@theme {
+  --color-paper: oklch(98.5% 0.004 220);
+  --color-paper-2: oklch(95.5% 0.007 220);
+  --color-rule: oklch(89.5% 0.01 220);
+  --color-ink: oklch(20% 0.03 255);
+  --color-fog: oklch(44% 0.025 245);
+  --color-teal: oklch(52% 0.14 168);
+  --color-teal-soft: oklch(94% 0.03 168);
 }
 
-html[data-theme='dark'],
-html[data-theme='light'] {
-  opacity: initial;
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    text-rendering: optimizeLegibility;
+  }
+  ::selection {
+    background: var(--color-teal);
+    color: var(--color-paper);
+  }
+  a:focus-visible,
+  button:focus-visible {
+    outline: 2px solid oklch(54% 0.16 250);
+    outline-offset: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer utilities {
+  /* Etiqueta pequeña en versalitas (fechas, kickers, cabeceras de raíl) */
+  .kicker {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Enlace tipográfico: palabra + flecha + subrayado fino */
+  .link-more {
+    white-space: nowrap;
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+    transition: color 120ms ease-out;
+  }
+  .link-more:hover {
+    color: var(--color-teal);
+  }
+  .link-more::after {
+    content: ' →';
+  }
+
+  .rise {
+    animation: rise 360ms ease-out both;
+  }
+
+  /* Losa tipográfica para artículos sin imagen de portada */
+  .tile-letter {
+    font-family: var(--font-display);
+    font-weight: 700;
+    line-height: 1;
+    color: color-mix(in oklch, var(--color-ink) 9%, transparent);
+    user-select: none;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Contenido de artículos (gana sobre @tailwindcss/typography) */
+.prose {
+  max-width: 65ch;
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: var(--color-ink);
+}
+/* Neutraliza el gris por defecto de @tailwindcss/typography */
+.prose p,
+.prose li,
+.prose td,
+.prose dt,
+.prose dd,
+.prose strong {
+  color: var(--color-ink);
+}
+.prose > * + * {
+  margin-top: 1.25em;
+}
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  margin-top: 2em;
+  color: var(--color-ink);
+}
+.prose h2 {
+  font-size: 1.6rem;
+}
+.prose h3 {
+  font-size: 1.3rem;
+}
+.prose a {
+  color: var(--color-ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--color-teal);
+  text-underline-offset: 3px;
+  transition: color 120ms ease-out;
+}
+.prose a:hover {
+  color: var(--color-teal);
+}
+.prose ul,
+.prose ol {
+  padding-left: 1.4em;
+}
+.prose ul {
+  list-style: disc;
+}
+.prose ol {
+  list-style: decimal;
+}
+.prose li + li {
+  margin-top: 0.4em;
+}
+.prose img {
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--color-rule);
+}
+.prose blockquote {
+  border-left: 2px solid var(--color-teal);
+  padding-left: 1.25em;
+  color: var(--color-fog);
+}
+.prose code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  background: var(--color-paper-2);
+  border: 1px solid var(--color-rule);
+  padding: 0.1em 0.35em;
+}
+.prose pre {
+  background: var(--color-paper-2);
+  border: 1px solid var(--color-rule);
+  padding: 1em 1.25em;
+  overflow-x: auto;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+.prose pre code {
+  background: none;
+  border: 0;
+  padding: 0;
+  font-size: inherit;
+}
+.prose hr {
+  border: 0;
+  border-top: 1px solid var(--color-rule);
 }
