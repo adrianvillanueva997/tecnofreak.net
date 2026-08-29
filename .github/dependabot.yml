@@ -10,6 +10,9 @@ updates:
     labels:
       - dependencies
       - javascript
+    groups:
+      npm-deps:
+        patterns: ["*"]
   - package-ecosystem: docker
     directory: /
     schedule:
@@ -17,6 +20,9 @@ updates:
     labels:
       - dependencies
       - docker
+    groups:
+      docker-deps:
+        patterns: ["*"]
   - package-ecosystem: github-actions
     directory: /
     schedule:
@@ -24,3 +30,6 @@ updates:
     labels:
       - dependencies
       - github-actions
+    groups:
+      actions-deps:
+        patterns: ["*"]
