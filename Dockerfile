@@ -1,7 +1,7 @@
 # Imagen de RUNTIME únicamente: el build de Next se hace en GitHub Actions
 # (con Postgres efímero) y el .next compilado entra por el contexto.
 
-FROM node:22.17.0-alpine
+FROM node:26.8.1-alpine
 
 RUN apk add --no-cache libc6-compat
 
