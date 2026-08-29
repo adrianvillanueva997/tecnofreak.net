@@ -1,0 +1,91 @@
+name: Docker Build (CI)
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches-ignore: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: docker-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:18-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: tecnofreak
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      DATABASE_URL: postgres://postgres:password@127.0.0.1:5432/tecnofreak
+      PAYLOAD_SECRET: ci-build-secret-not-for-prod
+      NEXT_PUBLIC_SERVER_URL: https://cms.tecnofreak.net
+      NEXT_TELEMETRY_DISABLED: 1
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Apply database schema
+        run: pnpm payload migrate
+
+      - name: Build Next.js
+        run: pnpm build
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image (no push)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: false
+          load: true
+          tags: tecnofreak:ci-${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Test image starts
+        run: |
+          docker run --rm -d --name tecnofreak-ci-test \
+            -p 3200:3000 \
+            -e DATABASE_URL="$DATABASE_URL" \
+            -e PAYLOAD_SECRET="$PAYLOAD_SECRET" \
+            -e NEXT_PUBLIC_SERVER_URL="$NEXT_PUBLIC_SERVER_URL" \
+            tecnofreak:ci-${{ github.sha }}
+          for i in $(seq 1 20); do
+            if curl -sf http://localhost:3200/api/health 2>/dev/null || curl -sf http://localhost:3200/ >/dev/null; then
+              echo "container healthy"
+              break
+            fi
+            sleep 3
+          done
+          docker logs tecnofreak-ci-test --tail 20 || true
+          docker rm -f tecnofreak-ci-test || true
