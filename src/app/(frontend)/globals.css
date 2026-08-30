@@ -213,6 +213,15 @@
   body {
     @apply bg-background text-foreground min-h-[100vh] flex flex-col;
   }
+  img,
+  video {
+    max-width: 100%;
+    height: auto;
+  }
+  picture {
+    display: block;
+    max-width: 100%;
+  }
 }
 
 /* ==========================================================================
