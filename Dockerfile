@@ -17,6 +17,7 @@ RUN corepack enable && pnpm install --frozen-lockfile --prod
 COPY .next ./.next
 COPY public ./public
 COPY next.config.ts ./
+COPY redirects.ts ./
 
 RUN chown -R node:node /app/.next /app/public
 
