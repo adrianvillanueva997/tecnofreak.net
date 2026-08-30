@@ -11,9 +11,8 @@ ENV NEXT_TELEMETRY_DISABLED=1
 
 # Dependencias de producción
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-RUN corepack enable && pnpm install --frozen-lockfile --prod
+RUN npm install -g pnpm@latest && pnpm install --frozen-lockfile --prod
 
-# Artefacto de build + estáticos + config
 COPY .next ./.next
 COPY public ./public
 COPY next.config.ts ./
