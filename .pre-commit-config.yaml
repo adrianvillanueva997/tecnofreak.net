@@ -1,0 +1,40 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-yaml
+        name: ⚙️ Check YAML
+      - id: check-toml
+        name: ⚙️ Check TOML
+      - id: end-of-file-fixer
+        name: ⚙️ End of file fixer
+      - id: trailing-whitespace
+        name: ⚙️ Trailing whitespace remover
+      - id: check-case-conflict
+        name: ⚙️ Check case conflict
+      - id: check-docstring-first
+        name: ⚙️ Check docstring first
+      - id: check-merge-conflict
+        name: ⚙️ Check merge conflict
+      - id: detect-private-key
+        name: ⚙️ Detect private key
+      - id: debug-statements
+        name: "⚙️ Check debug statements"
+
+  - repo: https://github.com/hadolint/hadolint
+    rev: v2.13.1-beta
+    hooks:
+      - id: hadolint
+        name: 🐳 Lint Dockerfiles
+
+  - repo: https://github.com/biomejs/pre-commit
+    rev: "v2.0.6" # Use the sha / tag you want to point at
+    hooks:
+      - id: biome-check
+        name: 🌿 Biome check
+
+  - repo: https://github.com/shssoichiro/oxipng
+    rev: v9.1.5
+    hooks:
+      - id: oxipng
+        args: ["-o", "4", "--strip", "safe", "--alpha"]

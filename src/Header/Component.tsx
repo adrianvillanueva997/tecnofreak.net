@@ -1,7 +1,5 @@
-import React from 'react'
-
-import { HeaderClient } from './Component.client'
+import { HeaderClient } from "./Component.client";
 
 export function Header() {
-  return <HeaderClient />
+	return <HeaderClient />;
 }
