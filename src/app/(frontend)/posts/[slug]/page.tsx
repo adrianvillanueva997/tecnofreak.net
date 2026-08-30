@@ -157,6 +157,7 @@ export default async function Post({ params: paramsPromise }: Args) {
               imgClassName="h-full w-full object-cover"
               loading="eager"
               priority
+              size="(max-width: 768px) 100vw, 768px"
             />
           </div>
         )}
