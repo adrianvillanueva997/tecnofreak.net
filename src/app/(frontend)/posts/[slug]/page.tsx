@@ -6,6 +6,7 @@ import { getPayload } from "payload";
 import { cache } from "react";
 import { ProductBoxBlock } from "@/blocks/ProductBox/Component";
 import { AdBanner } from "@/components/AdBanner";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { CommentsSection } from "@/components/Comments";
 import { LivePreviewListener } from "@/components/LivePreviewListener";
 import { Media } from "@/components/Media";
@@ -55,12 +56,17 @@ export default async function Post({ params: paramsPromise }: Args) {
 	if (!post) return <PayloadRedirects url={url} />;
 
 	const cats = Array.isArray(post.categories)
-		? (post.categories.filter((c) => typeof c === "object") as Array<{
-				id: number;
-				title: string;
-				slug: string;
-			}>)
+		? (post.categories.filter((c) => typeof c === "object") as Array<
+				import("@/payload-types").Category
+			>)
 		: [];
+	// Primary category = deepest breadcrumbs (most hierarchical)
+	const primaryCategory =
+		cats.length === 0
+			? null
+			: [...cats].sort(
+					(a, b) => (b.breadcrumbs?.length ?? 0) - (a.breadcrumbs?.length ?? 0),
+				)[0] ?? cats[0] ?? null;
 	const hero =
 		post.heroImage && typeof post.heroImage === "object"
 			? post.heroImage
@@ -137,7 +143,7 @@ export default async function Post({ params: paramsPromise }: Args) {
 
 			<article className="mx-auto max-w-3xl px-4 pt-10 sm:px-6">
 				<header>
-					<p className="kicker text-teal">Artículo</p>
+					<Breadcrumbs category={primaryCategory} className="mb-3" />
 					<h1 className="font-display mt-3 text-[clamp(1.9rem,4.5vw,3rem)] font-bold leading-[1.08] tracking-tight">
 						{post.title}
 					</h1>
