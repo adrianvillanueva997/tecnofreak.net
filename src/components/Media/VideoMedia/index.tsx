@@ -10,21 +10,36 @@ export const VideoMedia: React.FC<MediaProps> = (props) => {
 	const { onClick, resource, videoClassName } = props;
 
 	const videoRef = useRef<HTMLVideoElement>(null);
-	// const [showFallback] = useState<boolean>()
 
 	useEffect(() => {
-		const { current: video } = videoRef;
-		if (video) {
-			video.addEventListener("suspend", () => {
-				// setShowFallback(true);
-				// console.warn('Video was suspended, rendering fallback image.')
-			});
+		const video = videoRef.current;
+		if (!video) return;
+		if ("IntersectionObserver" in window) {
+			const observer = new IntersectionObserver(
+				(entries) => {
+					entries.forEach((entry) => {
+						if (entry.isIntersecting) {
+							const source = video.querySelector("source");
+							if (source && (source as HTMLSourceElement).dataset.src) {
+								const src = (source as HTMLSourceElement).dataset.src;
+								if (src) (source as HTMLSourceElement).src = src;
+								video.load();
+							}
+							observer.unobserve(video);
+						}
+					});
+				},
+				{ rootMargin: "200px" },
+			);
+			observer.observe(video);
+			return () => observer.disconnect();
 		}
 	}, []);
 
 	if (resource && typeof resource === "object") {
-		const { filename, url } = resource;
+		const { filename, url, thumbnailURL } = resource as any;
 		const src = url ? getMediaUrl(url) : getMediaUrl(`/media/${filename}`);
+		const poster = thumbnailURL ? getMediaUrl(thumbnailURL) : undefined;
 
 		return (
 			<video
@@ -35,9 +50,11 @@ export const VideoMedia: React.FC<MediaProps> = (props) => {
 				muted
 				onClick={onClick}
 				playsInline
+				preload="metadata"
+				poster={poster}
 				ref={videoRef}
 			>
-				<source src={src} />
+				<source data-src={src} src={src} />
 			</video>
 		);
 	}
