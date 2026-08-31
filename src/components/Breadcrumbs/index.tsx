@@ -3,20 +3,18 @@ import type { Category } from "@/payload-types";
 
 type Props = {
 	category: Category | null;
+	tags?: Array<{ id: number; title: string; slug: string }>;
 	className?: string;
 };
 
-// Responsive breadcrumb separator constants
-const SEPARATOR = ">";
-const MOBILE_WRAP_BREAKPOINT = "sm";
-
-export const Breadcrumbs: React.FC<Props> = ({ category, className }) => {
-	const crumbs: Array<{ label: string; href: string }> = [
-		{ label: "Inicio", href: "/" },
-	];
+export const Breadcrumbs: React.FC<Props> = ({
+	category,
+	tags = [],
+	className,
+}) => {
+	const crumbs: Array<{ label: string; href: string }> = [];
 
 	if (category) {
-		// Build hierarchy from nestedDocs breadcrumbs, mapped under /etiquetas
 		const chain = category.breadcrumbs?.length
 			? category.breadcrumbs
 			: category.parent && typeof category.parent === "object"
@@ -36,7 +34,6 @@ export const Breadcrumbs: React.FC<Props> = ({ category, className }) => {
 			crumbs.push({ label: b.label, href: `/etiquetas${b.url}` });
 		}
 
-		// Ensure the current category page is always the last crumb
 		const expectedLastHref = `/etiquetas/${category.slug}`;
 		const alreadyHasLast = crumbs.some((c) => c.href === expectedLastHref);
 		if (!alreadyHasLast) {
@@ -44,76 +41,73 @@ export const Breadcrumbs: React.FC<Props> = ({ category, className }) => {
 		}
 	}
 
-	// Determine if we're on a narrow viewport where we should stack vertically
-	const isMobile = typeof window !== "undefined" && window.innerWidth < 640;
-
 	return (
 		<nav
 			aria-label="Migas de pan"
-			className={`
-				rounded-md border border-rule bg-paper-2 px-3 py-2 flex flex-col sm:flex-row gap-2 ${className ?? ""}
-				shadow-sm transition-colors duration-200 hover:border-teal/30
-			`}
+			className={`flex items-center gap-2 rounded-md border bg-paper/50 px-3 py-1.5 ${className ?? ""}`}
 		>
-			<ol className={`
-				flex flex-col sm:flex-row gap-1.5 text-sm ${isMobile ? "w-full" : "gap-2"}
-				`}
-			>
+			<ol className="flex flex-wrap items-center gap-0.5">
 				{crumbs.map((c, i) => {
 					const isLast = i === crumbs.length - 1;
-					const isFirst = i === 0;
-
 					return (
-						<li
-							key={c.href}
-							className={`
-								flex items-center gap-1.5 ${isFirst && "pr-1"}
-								${isLast && "text-center"}
-							`}
-						>
+						<li key={c.href} className="flex items-center gap-1">
 							{isLast ? (
-								// Current page - primary action
 								<Link
 									href={c.href}
-									className={`
-										text-ink font-medium
-										${isMobile ? "hover:text-teal hover:underline" : "hover:text-teal hover:underline decoration-teal/30"}
-										focus-visible:ring-2 focus-visible:ring-teal focus-visible:ring-offset-paper-2
-									`}
-									aria-current="page"
+									className="text-[var(--color-ink)] font-medium hover:text-[var(--color-teal)] transition-colors duration-150 focus-visible:ring-2 focus-visible:ring-[var(--color-teal)] focus-visible:ring-offset-[var(--color-paper)] rounded"
+								>
+									{c.label}
+								</Link>
+							) : i === 0 ? (
+								<Link
+									href={c.href}
+									className="text-[var(--color-teal)] hover:text-[var(--color-ink)] transition-colors duration-150 focus-visible:ring-2 focus-visible:ring-[var(--color-teal)] focus-visible:ring-offset-[var(--color-paper)] rounded"
 								>
 									{c.label}
 								</Link>
 							) : (
-								// Intermediate crumb - link
-								<Link
-									href={c.href}
-									className={`
-										text-teal underline underline-offset-4
-										hover:text-ink hover:decoration-ink
-										 focus-visible:ring-2 focus-visible:ring-teal focus-visible:ring-offset-paper-2
-									`}
-								>
-									{c.label}
-								</Link>
-							)}
-							{!isLast && (
-								// Separator between crumbs
-								<span
-									aria-hidden="true"
-									className={`
-										text-fog/60
-										${isMobile ? "hidden" : "block"}
-										text-xs leading-none
-									`}
-								>
-									{SEPARATOR}
-								</span>
+								<>
+									<Link
+										href={c.href}
+										className="text-[var(--color-teal)] hover:text-[var(--color-ink)] transition-colors duration-150 focus-visible:ring-2 focus-visible:ring-[var(--color-teal)] focus-visible:ring-offset-[var(--color-paper)] rounded"
+									>
+										{c.label}
+									</Link>
+									<span
+										aria-hidden="true"
+										className="text-[var(--color-fog)] opacity-60"
+									>
+										/
+									</span>
+								</>
 							)}
 						</li>
 					);
 				})}
 			</ol>
+
+			{tags.length > 0 && (
+				<>
+					<span
+						aria-hidden="true"
+						className="text-[var(--color-fog)] opacity-60 mr-1 hidden sm:inline"
+					>
+						·
+					</span>
+					<ul className="flex flex-wrap items-center gap-1.5">
+						{tags.map((t) => (
+							<li key={t.id}>
+								<Link
+									href={`/etiquetas/${t.slug}`}
+									className="rounded-full border border-[var(--color-rule)] px-2 py-0.5 text-xs font-medium text-[var(--color-fog)] transition-all duration-100 hover:border-[var(--color-teal)] hover:text-[var(--color-teal)] hover:bg-[var(--color-paper-1)] focus-visible:ring-2 focus-visible:ring-[var(--color-teal)] focus-visible:ring-offset-[var(--color-paper)]"
+								>
+									{t.title}
+								</Link>
+							</li>
+						))}
+					</ul>
+				</>
+			)}
 		</nav>
 	);
 };

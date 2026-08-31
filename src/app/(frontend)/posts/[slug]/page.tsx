@@ -1,7 +1,6 @@
 import configPromise from "@payload-config";
 import type { Metadata } from "next";
 import { draftMode } from "next/headers";
-import Link from "next/link";
 import { getPayload } from "payload";
 import { cache } from "react";
 import { ProductBoxBlock } from "@/blocks/ProductBox/Component";
@@ -15,7 +14,7 @@ import { PostCard } from "@/components/PostCard";
 import RichText from "@/components/RichText";
 import { ShareButtons } from "@/components/ShareButtons";
 
-import type { Post, Product } from "@/payload-types";
+import type { Post as PostType, Product } from "@/payload-types";
 import { formatDate } from "@/utilities/formatDate";
 import { generateMeta } from "@/utilities/generateMeta";
 
@@ -64,9 +63,11 @@ export default async function Post({ params: paramsPromise }: Args) {
 	const primaryCategory =
 		cats.length === 0
 			? null
-			: [...cats].sort(
+			: ([...cats].sort(
 					(a, b) => (b.breadcrumbs?.length ?? 0) - (a.breadcrumbs?.length ?? 0),
-				)[0] ?? cats[0] ?? null;
+				)[0] ??
+				cats[0] ??
+				null);
 	const hero =
 		post.heroImage && typeof post.heroImage === "object"
 			? post.heroImage
@@ -76,7 +77,7 @@ export default async function Post({ params: paramsPromise }: Args) {
 
 	// Sigue leyendo: manual picks first, then same-tag news, then latest as filler
 	const related = Array.isArray(post.relatedPosts)
-		? (post.relatedPosts.filter((p) => typeof p === "object") as Post[])
+		? (post.relatedPosts.filter((p) => typeof p === "object") as PostType[])
 		: [];
 
 	if (related.length < 3 && !draft && cats.length > 0) {
@@ -95,7 +96,7 @@ export default async function Post({ params: paramsPromise }: Args) {
 				],
 			},
 		});
-		for (const p of byTag.docs as Post[]) {
+		for (const p of byTag.docs as PostType[]) {
 			if (related.length >= 3) break;
 			if (!related.some((r) => r.id === p.id)) related.push(p);
 		}
@@ -119,7 +120,7 @@ export default async function Post({ params: paramsPromise }: Args) {
 				],
 			},
 		});
-		for (const p of recent.docs as Post[]) {
+		for (const p of recent.docs as PostType[]) {
 			if (related.length >= 3) break;
 			if (!related.some((r) => r.id === p.id)) related.push(p);
 		}
@@ -143,25 +144,20 @@ export default async function Post({ params: paramsPromise }: Args) {
 
 			<article className="mx-auto max-w-3xl px-4 pt-10 sm:px-6">
 				<header>
-					<Breadcrumbs category={primaryCategory} className="mb-3" />
+					<Breadcrumbs
+						category={primaryCategory}
+						tags={cats}
+						className="mb-3"
+					/>
 					<h1 className="font-display mt-3 text-[clamp(1.9rem,4.5vw,3rem)] font-bold leading-[1.08] tracking-tight">
 						{post.title}
 					</h1>
-					<div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 border-b border-rule pb-5">
+					<div className="mt-5 flex items-center gap-x-4 border-b border-rule pb-5">
 						{post.publishedAt && (
 							<time className="kicker text-fog" dateTime={post.publishedAt}>
 								{formatDate(post.publishedAt)}
 							</time>
 						)}
-						{cats.map((c) => (
-							<Link
-								key={c.id}
-								href={`/etiquetas/${c.slug}`}
-								className="kicker text-fog transition-colors duration-100 hover:text-teal"
-							>
-								{c.title}
-							</Link>
-						))}
 					</div>
 				</header>
 

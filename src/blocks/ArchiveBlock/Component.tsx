@@ -51,6 +51,7 @@ export const ArchiveBlock: React.FC<
 		if (selectedDocs?.length) {
 			const filteredSelectedPosts = selectedDocs.map((post) => {
 				if (typeof post.value === "object") return post.value;
+				return undefined;
 			}) as Post[];
 
 			posts = filteredSelectedPosts;

@@ -1,0 +1,75 @@
+{
+	"$schema": "https://biomejs.dev/schemas/2.5.10/schema.json",
+	"vcs": {
+		"enabled": true,
+		"clientKind": "git",
+		"useIgnoreFile": true
+	},
+	"files": {
+		"ignoreUnknown": true,
+		"includes": [
+			"**/*.{js,ts,jsx,tsx,mjs,cjs,mts,cts,json,jsonc}",
+			"!src/endpoints/seed",
+			"!scripts"
+		]
+	},
+	"formatter": {
+		"enabled": true,
+		"indentStyle": "tab"
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"preset": "recommended",
+			"suspicious": {
+				"noExplicitAny": "off",
+				"noArrayIndexKey": "off",
+				"noShadowRestrictedNames": "off",
+				"noImplicitAnyLet": "off"
+			},
+			"style": {
+				"noNonNullAssertion": "off"
+			},
+			"correctness": {
+				"noUnusedFunctionParameters": "off",
+				"noUnusedImports": "warn"
+			},
+			"security": {
+				"noDangerouslySetInnerHtml": "off"
+			},
+			"complexity": {
+				"noBannedTypes": "off"
+			},
+			"a11y": {
+				"useSemanticElements": "off",
+				"useAnchorContent": "off",
+				"useButtonType": "off",
+				"useAriaPropsSupportedByRole": "off"
+			},
+			"performance": {
+				"noImgElement": "off"
+			}
+		}
+	},
+	"javascript": {
+		"formatter": {
+			"quoteStyle": "double"
+		}
+	},
+	"css": {
+		"formatter": {
+			"enabled": false
+		},
+		"linter": {
+			"enabled": false
+		}
+	},
+	"assist": {
+		"enabled": true,
+		"actions": {
+			"source": {
+				"organizeImports": "on"
+			}
+		}
+	}
+}
