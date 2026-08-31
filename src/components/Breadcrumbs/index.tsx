@@ -45,7 +45,10 @@ export const Breadcrumbs: React.FC<Props> = ({ category, className }) => {
 	}
 
 	return (
-		<nav aria-label="Migas de pan" className={className}>
+		<nav
+			aria-label="Migas de pan"
+			className={`rounded-md border border-rule bg-paper-2 px-3 py-2 ${className ?? ""}`}
+		>
 			<ol className="flex flex-wrap items-center gap-1.5">
 				{crumbs.map((c, i) => {
 					const isLast = i === crumbs.length - 1;
@@ -54,21 +57,24 @@ export const Breadcrumbs: React.FC<Props> = ({ category, className }) => {
 							{isLast ? (
 								<span
 									aria-current="page"
-									className="kicker text-ink"
+									className="kicker text-ink font-bold"
 								>
 									{c.label}
 								</span>
 							) : (
 								<Link
 									href={c.href}
-									className="kicker text-fog transition-colors duration-100 hover:text-teal"
+									className="kicker text-teal underline decoration-teal/30 underline-offset-4 transition-colors duration-100 hover:text-ink hover:decoration-teal"
 								>
 									{c.label}
 								</Link>
 							)}
 							{!isLast && (
-								<span aria-hidden="true" className="kicker text-fog opacity-50">
-									/
+								<span
+									aria-hidden="true"
+									className="text-fog opacity-40 text-xs leading-none"
+								>
+									›
 								</span>
 							)}
 						</li>
