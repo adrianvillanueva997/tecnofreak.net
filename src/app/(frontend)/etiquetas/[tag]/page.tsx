@@ -35,7 +35,13 @@ export default async function Etiqueta({ params: paramsPromise }: Args) {
 		where: {
 			and: [{ _status: { equals: "published" } }, { tags: { equals: tag.id } }],
 		},
-		select: { title: true, slug: true, categories: true, publishedAt: true },
+		select: {
+			title: true,
+			slug: true,
+			heroImage: true,
+			categories: true,
+			publishedAt: true,
+		},
 	});
 
 	return (

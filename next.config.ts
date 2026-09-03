@@ -28,6 +28,7 @@ const nextConfig: NextConfig = {
 		loadPaths: ["./node_modules/@payloadcms/ui/dist/scss/"],
 	},
 	images: {
+		contentDispositionType: "inline",
 		localPatterns: [
 			{
 				pathname: "/api/media/file/**",
@@ -36,7 +37,7 @@ const nextConfig: NextConfig = {
 				pathname: "/media/**",
 			},
 		],
-		formats: ["image/avif", "image/webp"],
+		formats: ["image/webp"],
 		qualities: [75, 85, 100],
 		deviceSizes: [640, 750, 828, 1080, 1200, 1920],
 		imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],

@@ -198,7 +198,7 @@ export default async function Post({ params: paramsPromise }: Args) {
 				</header>
 
 				{hero && (
-					<div className="mt-8 aspect-[16/9] overflow-hidden border border-rule">
+					<div className="mt-8 aspect-[16/9] overflow-hidden">
 						<Media
 							resource={hero}
 							className="h-full w-full"

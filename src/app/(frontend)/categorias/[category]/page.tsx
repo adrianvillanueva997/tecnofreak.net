@@ -8,7 +8,10 @@ import type { Category } from "@/payload-types";
 
 export const dynamic = "force-dynamic";
 
-type Args = { params: Promise<{ category: string }> };
+type Args = {
+	params: Promise<{ category: string }>;
+	searchParams: Promise<{ all?: string }>;
+};
 type CategorySummary = Pick<Category, "id" | "title" | "slug" | "parent">;
 
 function parentID(category: CategorySummary) {
@@ -27,8 +30,9 @@ function descendantIDs(categoryID: number, children: Map<number, number[]>) {
 	return ids;
 }
 
-export default async function Categoria({ params: paramsPromise }: Args) {
+export default async function Categoria({ params: paramsPromise, searchParams }: Args) {
 	const { category: categorySlug } = await paramsPromise;
+	const { all } = await searchParams;
 	const payload = await getPayload({ config: configPromise });
 	const allCategories = await payload.find({
 		collection: "categories",
@@ -50,7 +54,8 @@ export default async function Categoria({ params: paramsPromise }: Args) {
 		(item) => parentID(item) === category.id,
 	);
 	const categoryIDs = descendantIDs(category.id, children);
-	const previewLimit = 5;
+	const showAll = all === "1";
+	const previewLimit = showAll ? 0 : 5;
 
 	const posts = await payload.find({
 		collection: "posts",
@@ -123,9 +128,9 @@ export default async function Categoria({ params: paramsPromise }: Args) {
 							<PostRow key={post.id} post={post} first={index === 0} />
 						))}
 					</ul>
-					{result.totalDocs > previewLimit && (
+					{!showAll && result.totalDocs > previewLimit && (
 						<p className="mt-3 text-right">
-							<Link href={`/categorias/${child.slug}`} className="link-more text-sm">
+							<Link href={`/categorias/${child.slug}?all=1`} className="link-more text-sm">
 								Ver más ({result.totalDocs})
 							</Link>
 						</p>
@@ -142,9 +147,9 @@ export default async function Categoria({ params: paramsPromise }: Args) {
 							<PostRow key={post.id} post={post} first={index === 0} />
 						))}
 					</ul>
-					{assignedToParent.totalDocs > previewLimit && (
+					{!showAll && assignedToParent.totalDocs > previewLimit && (
 						<p className="mt-3 text-right">
-							<Link href={`/categorias/${category.slug}`} className="link-more text-sm">
+							<Link href={`/categorias/${category.slug}?all=1`} className="link-more text-sm">
 								Ver más ({assignedToParent.totalDocs})
 							</Link>
 						</p>

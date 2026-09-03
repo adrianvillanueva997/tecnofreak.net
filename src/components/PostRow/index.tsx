@@ -27,7 +27,7 @@ export const PostRow: React.FC<{ post: PostRowData; first?: boolean }> = ({
 				href={`/posts/${post.slug}`}
 				className="group grid grid-cols-[5rem_1fr] items-center gap-x-4 py-4 sm:grid-cols-[7rem_8.5rem_1fr_auto]"
 			>
-				<div className="relative row-span-2 aspect-video overflow-hidden border border-rule bg-paper-2 sm:row-span-1">
+				<div className="relative row-span-2 aspect-video overflow-hidden bg-paper-2 sm:row-span-1">
 					{hero ? (
 						<Media
 							resource={hero}

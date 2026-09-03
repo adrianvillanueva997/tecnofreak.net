@@ -14,9 +14,13 @@ export const getMediaUrl = (
 ): string => {
 	if (!url) return "";
 
+	const mediaURL = url.startsWith("/api/media/file/")
+		? url.replace("/api/media/file/", "/media/")
+		: url;
+
 	if (cacheTag && cacheTag !== "") {
 		cacheTag = encodeURIComponent(cacheTag);
 	}
 
-	return cacheTag ? `${url}?${cacheTag}` : url;
+	return cacheTag ? `${mediaURL}?${cacheTag}` : mediaURL;
 };

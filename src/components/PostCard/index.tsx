@@ -35,7 +35,7 @@ export const PostCard: React.FC<{
 					className="grid grid-cols-[7rem_1fr] items-start gap-4"
 					aria-label={post.title}
 				>
-					<div className="relative aspect-video overflow-hidden border border-rule bg-paper-2">
+					<div className="relative aspect-video overflow-hidden bg-paper-2">
 						{hero ? (
 							<Media
 								resource={hero}
@@ -82,7 +82,7 @@ export const PostCard: React.FC<{
 				aria-label={post.title}
 			>
 				<div
-					className={`relative overflow-hidden border border-rule bg-paper-2 ${
+					className={`relative overflow-hidden bg-paper-2 ${
 						lead ? "aspect-[2/1]" : "aspect-[16/9]"
 					}`}
 				>
