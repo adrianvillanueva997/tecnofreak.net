@@ -3,7 +3,7 @@ import type { Metadata } from "next/types";
 import { getPayload } from "payload";
 import { ProductsExplorer } from "@/components/ProductsExplorer";
 
-export const revalidate = 600;
+export const dynamic = "force-dynamic";
 
 export default async function Productos() {
 	const payload = await getPayload({ config: configPromise });

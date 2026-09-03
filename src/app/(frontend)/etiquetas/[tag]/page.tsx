@@ -5,7 +5,7 @@ import type { Metadata } from "next/types";
 import { getPayload } from "payload";
 import { PostRow } from "@/components/PostRow";
 
-export const revalidate = 600;
+export const dynamic = "force-dynamic";
 
 type Args = {
 	params: Promise<{
@@ -63,17 +63,6 @@ export default async function Etiqueta({ params: paramsPromise }: Args) {
 			</p>
 		</div>
 	);
-}
-
-export async function generateStaticParams() {
-	const payload = await getPayload({ config: configPromise });
-	const categories = await payload.find({
-		collection: "tags",
-		depth: 0,
-		limit: 0,
-		select: { slug: true },
-	});
-	return categories.docs.map((c) => ({ tag: c.slug }));
 }
 
 export async function generateMetadata({

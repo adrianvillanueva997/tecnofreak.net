@@ -6,7 +6,7 @@ import { PostsArchive } from "@/components/PostsArchive";
 
 import { getYearCounts } from "@/utilities/getYearCounts";
 
-export const revalidate = 600;
+export const dynamic = "force-dynamic";
 
 const PER_PAGE = 24;
 
@@ -60,18 +60,4 @@ export async function generateMetadata({
 		description:
 			"Archivo completo de artículos de tecnofreak.net, filtrable por año.",
 	};
-}
-
-export async function generateStaticParams() {
-	const payload = await getPayload({ config: configPromise });
-	const { totalDocs } = await payload.count({
-		collection: "posts",
-		overrideAccess: false,
-		where: { _status: { equals: "published" } },
-	});
-
-	const totalPages = Math.max(1, Math.ceil(totalDocs / PER_PAGE));
-	const pages: { pageNumber: string }[] = [];
-	for (let i = 2; i <= totalPages; i++) pages.push({ pageNumber: String(i) });
-	return pages;
 }

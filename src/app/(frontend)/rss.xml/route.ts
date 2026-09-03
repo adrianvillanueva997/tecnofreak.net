@@ -1,7 +1,7 @@
 import configPromise from "@payload-config";
 import { getPayload } from "payload";
 
-export const revalidate = 600;
+export const dynamic = "force-dynamic";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:3000";
 

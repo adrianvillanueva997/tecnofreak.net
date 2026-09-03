@@ -3,7 +3,7 @@ import type { Metadata } from "next/types";
 import { getPayload } from "payload";
 import { TagsDirectory } from "@/components/TagsDirectory";
 
-export const revalidate = 600;
+export const dynamic = "force-dynamic";
 
 export default async function Etiquetas() {
 	const payload = await getPayload({ config: configPromise });

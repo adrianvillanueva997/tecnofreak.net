@@ -5,7 +5,7 @@ import { PostsArchive } from "@/components/PostsArchive";
 
 import { getYearCounts } from "@/utilities/getYearCounts";
 
-export const revalidate = 600;
+export const dynamic = "force-dynamic";
 
 const PER_PAGE = 24;
 

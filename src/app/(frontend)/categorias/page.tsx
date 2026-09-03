@@ -4,7 +4,7 @@ import type { Metadata } from "next/types";
 import { getPayload } from "payload";
 import type { Category } from "@/payload-types";
 
-export const revalidate = 600;
+export const dynamic = "force-dynamic";
 
 function parentID(category: Category) {
 	return typeof category.parent === "object" && category.parent

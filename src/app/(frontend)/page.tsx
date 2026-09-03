@@ -4,7 +4,7 @@ import { getPayload } from "payload";
 import { AdBanner } from "@/components/AdBanner";
 import { PostCard } from "@/components/PostCard";
 
-export const revalidate = 600;
+export const dynamic = "force-dynamic";
 
 const SECONDARY = 3;
 const FEED = 9;

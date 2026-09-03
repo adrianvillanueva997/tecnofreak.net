@@ -6,7 +6,7 @@ import { PostsArchive } from "@/components/PostsArchive";
 
 import { getYearCounts } from "@/utilities/getYearCounts";
 
-export const revalidate = 600;
+export const dynamic = "force-dynamic";
 
 type Args = {
 	params: Promise<{
@@ -56,11 +56,6 @@ export default async function PostsByYear({ params: paramsPromise }: Args) {
 			yearCounts={yearCounts}
 		/>
 	);
-}
-
-export async function generateStaticParams() {
-	const yearCounts = await getYearCounts();
-	return yearCounts.map(({ year }) => ({ year }));
 }
 
 export async function generateMetadata({

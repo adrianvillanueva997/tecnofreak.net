@@ -6,7 +6,7 @@ import { getPayload } from "payload";
 import { PostRow } from "@/components/PostRow";
 import type { Category } from "@/payload-types";
 
-export const revalidate = 600;
+export const dynamic = "force-dynamic";
 
 type Args = { params: Promise<{ category: string }> };
 type CategorySummary = Pick<Category, "id" | "title" | "slug" | "parent">;
@@ -158,17 +158,6 @@ export default async function Categoria({ params: paramsPromise }: Args) {
 			</p>
 		</div>
 	);
-}
-
-export async function generateStaticParams() {
-	const payload = await getPayload({ config: configPromise });
-	const categories = await payload.find({
-		collection: "categories",
-		depth: 0,
-		limit: 0,
-		select: { slug: true },
-	});
-	return categories.docs.map((category) => ({ category: category.slug }));
 }
 
 export async function generateMetadata({
