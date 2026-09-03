@@ -20,6 +20,14 @@ export const Categories: CollectionConfig = {
 			type: "text",
 			required: true,
 		},
+		{
+			name: "parent",
+			type: "relationship",
+			admin: {
+				position: "sidebar",
+			},
+			relationTo: "categories",
+		},
 		slugField({
 			position: undefined,
 		}),

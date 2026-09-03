@@ -14,9 +14,42 @@ import { PostCard } from "@/components/PostCard";
 import RichText from "@/components/RichText";
 import { ShareButtons } from "@/components/ShareButtons";
 
-import type { Post, Product } from "@/payload-types";
+import type { Category, Post, Product, Tag } from "@/payload-types";
 import { formatDate } from "@/utilities/formatDate";
 import { generateMeta } from "@/utilities/generateMeta";
+
+function categoryPath(category: Category): Category[] {
+	const path: Category[] = [];
+	let current: Category | null = category;
+	const seen = new Set<number>();
+
+	while (current && !seen.has(current.id)) {
+		path.unshift(current);
+		seen.add(current.id);
+		current = typeof current.parent === "object" && current.parent ? current.parent : null;
+	}
+
+	return path;
+}
+
+function categoryGroups(categories: Category[]) {
+	const groups = new Map<number, { parent: Category; children: Category[] }>();
+
+	for (const category of categories) {
+		const path = categoryPath(category);
+		const parent = path[0];
+		if (!parent) continue;
+
+		const group = groups.get(parent.id) ?? { parent, children: [] };
+		const child = path[path.length - 1];
+		if (child.id !== parent.id && !group.children.some((item) => item.id === child.id)) {
+			group.children.push(child);
+		}
+		groups.set(parent.id, group);
+	}
+
+	return [...groups.values()];
+}
 
 export async function generateStaticParams() {
 	const payload = await getPayload({ config: configPromise });
@@ -55,18 +88,11 @@ export default async function Post({ params: paramsPromise }: Args) {
 	if (!post) return <PayloadRedirects url={url} />;
 
 	const cats = Array.isArray(post.categories)
-		? (post.categories.filter((c) => typeof c === "object") as Array<{
-				id: number;
-				title: string;
-				slug: string;
-			}>)
+		? post.categories.filter((category): category is Category => typeof category === "object")
 		: [];
+	const categoryRows = categoryGroups(cats);
 	const tags = Array.isArray(post.tags)
-		? (post.tags.filter((tag) => typeof tag === "object") as Array<{
-				id: number;
-				title: string;
-				slug: string;
-			}>)
+		? post.tags.filter((tag): tag is Tag => typeof tag === "object")
 		: [];
 	const hero =
 		post.heroImage && typeof post.heroImage === "object"
@@ -148,30 +174,44 @@ export default async function Post({ params: paramsPromise }: Args) {
 					<h1 className="font-display mt-3 text-[clamp(1.9rem,4.5vw,3rem)] font-bold leading-[1.08] tracking-tight">
 						{post.title}
 					</h1>
-					<div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 border-b border-rule pb-5">
+					<div className="mt-5 border-b border-rule pb-5">
 						{post.publishedAt && (
-							<time className="kicker text-fog" dateTime={post.publishedAt}>
+							<time className="kicker mr-4 text-fog" dateTime={post.publishedAt}>
 								{formatDate(post.publishedAt)}
 							</time>
 						)}
-						{cats.map((c) => (
-							<Link
-								key={c.id}
-								href={`/categorias/${c.slug}`}
-								className="kicker text-fog transition-colors duration-100 hover:text-teal"
-							>
-								{c.title}
-							</Link>
-						))}
-						{tags.map((tag) => (
-							<Link
-								key={tag.id}
-								href={`/etiquetas/${tag.slug}`}
-								className="kicker text-teal transition-colors duration-100 hover:text-ink"
-							>
-								#{tag.title}
-							</Link>
-						))}
+						{cats.length > 0 && (
+							<nav aria-label="Categorías" className="mt-3 space-y-2">
+								{categoryRows.map(({ parent, children }) => (
+									<div
+										key={parent.id}
+										className="kicker flex flex-wrap items-center gap-x-3 gap-y-2 border-l-2 border-teal pl-3"
+									>
+										<Link
+											href={`/categorias/${parent.slug}`}
+											className="font-semibold text-ink transition-colors duration-100 hover:text-teal"
+										>
+											{parent.title}
+										</Link>
+										{children.length > 0 && (
+											<span className="flex flex-wrap items-center gap-x-2 gap-y-1 text-fog">
+												{children.map((child, index) => (
+													<span key={child.id} className="inline-flex items-center gap-2">
+														{index > 0 && <span aria-hidden="true">·</span>}
+														<Link
+															href={`/categorias/${child.slug}`}
+															className="transition-colors duration-100 hover:text-teal"
+														>
+															{child.title}
+														</Link>
+													</span>
+												))}
+											</span>
+										)}
+									</div>
+								))}
+							</nav>
+						)}
 					</div>
 				</header>
 
@@ -208,6 +248,23 @@ export default async function Post({ params: paramsPromise }: Args) {
 						Como afiliado de Amazon, tecnofreak.net percibe una comisión por las
 						compras cualificadas. Esto no afecta al precio que pagas.
 					</p>
+				)}
+
+				{tags.length > 0 && (
+					<section aria-label="Etiquetas" className="mt-10 border-t border-rule pt-5">
+						<h2 className="kicker text-fog">Etiquetas</h2>
+						<div className="mt-3 flex flex-wrap gap-2">
+							{tags.map((tag) => (
+								<Link
+									key={tag.id}
+									href={`/etiquetas/${tag.slug}`}
+									className="kicker border border-rule px-2.5 py-1 text-teal transition-colors duration-100 hover:border-teal hover:text-ink"
+								>
+									#{tag.title}
+								</Link>
+							))}
+						</div>
+					</section>
 				)}
 
 				<div className="mt-10 border-t border-rule pt-5">

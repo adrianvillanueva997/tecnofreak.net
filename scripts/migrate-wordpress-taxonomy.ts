@@ -25,6 +25,7 @@ type Term = {
 	taxonomy: Taxonomy;
 	slug: string;
 	title: string;
+	parent?: string;
 };
 
 type WordPressPost = {
@@ -77,8 +78,18 @@ function parseTerms(xml: string): Term[] {
 			const block = match[1];
 			const slug = valueOf(block, definition.slug);
 			const title = valueOf(block, definition.title);
-			if (slug && title)
-				terms.push({ taxonomy: definition.taxonomy, slug, title });
+			const parent =
+				definition.taxonomy === "category"
+					? valueOf(block, "wp:category_parent")
+					: "";
+			if (slug && title) {
+				terms.push({
+					taxonomy: definition.taxonomy,
+					slug,
+					title,
+					...(parent ? { parent } : {}),
+				});
+			}
 		}
 	}
 	return terms;
@@ -135,6 +146,23 @@ async function main() {
 		}
 	}
 
+	let hierarchyUpdated = 0;
+	for (const term of terms) {
+		if (term.taxonomy !== "category" || !term.parent) continue;
+		const categoryId = termIds.get(`category:${term.slug}`);
+		const parentId = termIds.get(`category:${term.parent}`);
+		if (!categoryId || !parentId) continue;
+		if (!dryRun) {
+			await payload.update({
+				collection: "categories",
+				id: categoryId,
+				data: { parent: parentId },
+				context: { disableRevalidate: true },
+			});
+		}
+		hierarchyUpdated++;
+	}
+
 	let matched = 0;
 	let updated = 0;
 	let unmatched = 0;
@@ -175,6 +203,7 @@ async function main() {
 	payload.logger.info(
 		`${dryRun ? "Would update" : "Updated"} ${updated} posts; ` +
 			`matched ${matched}/${sourcePosts.length}, ${unmatched} unmatched; ` +
+			`${dryRun ? "would update" : "updated"} ${hierarchyUpdated} category parents; ` +
 			`read ${terms.filter((term) => term.taxonomy === "category").length} categories and ` +
 			`${terms.filter((term) => term.taxonomy === "post_tag").length} tags`,
 	);
