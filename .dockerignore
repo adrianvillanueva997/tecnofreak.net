@@ -5,7 +5,6 @@ node_modules
 backup
 coverage
 tests
-scripts
 media_data
 .env*
 *.md

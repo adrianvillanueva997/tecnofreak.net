@@ -15,8 +15,11 @@ RUN npm install -g pnpm@latest && pnpm install --frozen-lockfile --prod
 
 COPY .next ./.next
 COPY public ./public
+COPY src ./src
+COPY scripts ./scripts
 COPY next.config.ts ./
 COPY redirects.ts ./
+COPY tsconfig.json ./
 
 RUN chown -R node:node /app/.next /app/public
 
