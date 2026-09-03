@@ -127,7 +127,7 @@ export default async function HomePage() {
 								{topTags.map((tag) => (
 									<li key={tag.id}>
 										<Link
-											href={`/etiquetas/${tag.slug}`}
+											href={`/categorias/${tag.slug}`}
 											className="inline-flex min-h-11 items-center border border-rule bg-paper px-3 kicker transition-colors duration-100 hover:border-teal hover:text-teal"
 										>
 											{tag.title}
@@ -137,7 +137,7 @@ export default async function HomePage() {
 							</ul>
 							<p className="mt-3">
 								<Link href="/etiquetas" className="link-more text-sm">
-									Todas las etiquetas
+									Todas las categorías
 								</Link>
 							</p>
 							<div className="mt-8 border border-rule bg-paper-2 p-5">

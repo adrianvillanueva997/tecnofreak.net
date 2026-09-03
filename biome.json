@@ -1,0 +1,17 @@
+{
+	"files": {
+		"includes": [
+			"**",
+			"!**/.next",
+			"!**/backup",
+			"!**/globals.css",
+			"!**/importMap.js"
+		]
+	},
+	"formatter": {
+		"enabled": false
+	},
+	"linter": {
+		"enabled": false
+	}
+}

@@ -3,8 +3,8 @@ import { slugField } from "payload";
 import { anyone } from "../access/anyone";
 import { authenticated } from "../access/authenticated";
 
-export const Categories: CollectionConfig = {
-	slug: "categories",
+export const Tags: CollectionConfig = {
+	slug: "tags",
 	access: {
 		create: authenticated,
 		delete: authenticated,
@@ -19,14 +19,6 @@ export const Categories: CollectionConfig = {
 			name: "title",
 			type: "text",
 			required: true,
-		},
-		{
-			name: "parent",
-			type: "relationship",
-			admin: {
-				position: "sidebar",
-			},
-			relationTo: "categories",
 		},
 		slugField({
 			position: undefined,

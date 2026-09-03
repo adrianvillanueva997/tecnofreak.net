@@ -7,9 +7,9 @@ export const revalidate = 600;
 
 export default async function Etiquetas() {
 	const payload = await getPayload({ config: configPromise });
-	const [categories, posts] = await Promise.all([
+	const [tags, posts] = await Promise.all([
 		payload.find({
-			collection: "categories",
+			collection: "tags",
 			depth: 0,
 			limit: 0,
 			sort: "title",
@@ -20,27 +20,27 @@ export default async function Etiquetas() {
 			depth: 0,
 			limit: 0,
 			overrideAccess: false,
-			select: { categories: true },
+			select: { tags: true },
 			where: { _status: { equals: "published" } },
 		}),
 	]);
 
 	const counts = new Map<number, number>();
 	for (const p of posts.docs) {
-		for (const c of p.categories ?? []) {
-			const id = typeof c === "object" ? c.id : c;
+		for (const t of p.tags ?? []) {
+			const id = typeof t === "object" ? t.id : t;
 			if (typeof id === "number") counts.set(id, (counts.get(id) ?? 0) + 1);
 		}
 	}
 
-	const tags = categories.docs
-		.map((c) => ({
-			id: c.id,
-			title: c.title,
-			slug: c.slug,
-			count: counts.get(c.id) ?? 0,
+	const tagItems = tags.docs
+		.map((tag) => ({
+			id: tag.id,
+			title: tag.title,
+			slug: tag.slug,
+			count: counts.get(tag.id) ?? 0,
 		}))
-		.filter((c) => c.count > 0);
+		.filter((tag) => tag.count > 0);
 
 	return (
 		<div className="mx-auto max-w-4xl px-4 pt-10 sm:px-6 pb-16">
@@ -50,11 +50,11 @@ export default async function Etiquetas() {
 					Etiquetas
 				</h1>
 				<p className="kicker mt-3 text-fog">
-					{tags.length} etiquetas · explora los artículos por tema
+					{tagItems.length} etiquetas · explora los artículos por tema
 				</p>
 			</header>
 
-			<TagsDirectory tags={tags} />
+			<TagsDirectory tags={tagItems} />
 		</div>
 	);
 }
