@@ -4,6 +4,6 @@
  * without it links still work but are untagged.
  */
 export function buildAmazonUrl(asin: string): string {
-	const tag = process.env.AMAZON_TAG;
+	const tag = process.env.AMAZON_TAG || "acierta100cia-21";
 	return `https://www.amazon.es/dp/${encodeURIComponent(asin)}${tag ? `?tag=${encodeURIComponent(tag)}` : ""}`;
 }

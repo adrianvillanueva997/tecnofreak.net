@@ -46,6 +46,13 @@ export default async function Etiqueta({ params: paramsPromise }: Args) {
 
 	return (
 		<div className="mx-auto max-w-3xl px-4 pt-10 sm:px-6 pb-16">
+			<nav aria-label="Navegación de etiquetas" className="kicker mb-5 flex flex-wrap items-center gap-2 text-fog">
+				<Link href="/etiquetas" className="transition-colors duration-100 hover:text-teal">
+					Etiquetas
+				</Link>
+				<span aria-hidden="true">›</span>
+				<span className="text-ink">{tag.title}</span>
+			</nav>
 			<header className="border-b-2 border-teal pb-5">
 				<p className="kicker text-teal">Etiqueta</p>
 				<h1 className="font-display mt-2 text-[clamp(1.9rem,4.5vw,3rem)] font-bold leading-[1.08] tracking-tight">

@@ -15,20 +15,14 @@ type Props = {
 export const ProductBoxBlock: React.FC<Props> = ({ product }) => {
 	if (!product || typeof product === "number") return null;
 
-	const stars = product.rating
-		? "★★★★★".slice(0, Math.round(product.rating)) +
-			"☆☆☆☆☆".slice(0, 5 - Math.round(product.rating))
-		: null;
-
 	// Títulos estilo Amazon traen especificaciones tras «|»: mostramos solo el nombre principal
 	const [mainTitle] = product.title.split("|");
 	const cardTitle = (mainTitle || product.title).trim();
 
 	return (
-		<article className="not-prose my-6 break-words overflow-hidden rounded-lg border border-rule bg-paper-2">
-			<div className="flex flex-col md:flex-row">
-				{/* Imagen */}
-				<div className="flex aspect-square w-full items-center justify-center border-b border-rule bg-white p-4 md:aspect-auto md:w-48 md:shrink-0 md:self-stretch md:border-b-0 md:border-r">
+		<article className="not-prose group my-6 break-words overflow-hidden border-t-2 border-teal bg-paper transition-colors duration-100 hover:bg-paper-2">
+			<div className="flex h-full flex-col sm:flex-row">
+				<div className="flex aspect-[4/3] w-full items-center justify-center bg-white p-5 sm:aspect-auto sm:w-36 sm:shrink-0 sm:self-stretch">
 					{product.image && typeof product.image === "object" ? (
 						<Media
 							resource={product.image}
@@ -45,30 +39,20 @@ export const ProductBoxBlock: React.FC<Props> = ({ product }) => {
 					)}
 				</div>
 
-				{/* Contenido */}
 				<div className="flex min-w-0 grow flex-col p-5">
 					{product.brand && <p className="kicker text-teal">{product.brand}</p>}
 					<h3
-						className="font-display mt-1 line-clamp-2 text-lg font-bold leading-snug tracking-tight sm:text-xl"
+						className="font-display mt-1 line-clamp-3 text-lg font-bold leading-snug tracking-tight text-ink transition-colors duration-100 group-hover:text-teal sm:text-xl"
 						title={product.title}
 					>
 						{cardTitle}
 					</h3>
-					{stars != null && (
-						<p
-							aria-label={`Valoración ${product.rating} de 5`}
-							className="mt-1.5 text-sm text-fog"
-						>
-							{stars}
-							<span className="ml-1">({product.rating})</span>
-						</p>
-					)}
 					{product.features && (
-						<ul className="m-0 mt-3 hidden list-none space-y-1 p-0 text-sm leading-relaxed text-fog sm:block">
+						<ul className="m-0 mt-3 list-none space-y-1 p-0 text-sm leading-relaxed text-fog">
 							{product.features
 								.split("\n")
 								.filter(Boolean)
-								.slice(0, 3)
+								.slice(0, 2)
 								.map((f, i) => (
 									<li key={i} className="flex gap-2">
 										<span aria-hidden="true" className="text-teal">
@@ -81,16 +65,16 @@ export const ProductBoxBlock: React.FC<Props> = ({ product }) => {
 					)}
 				</div>
 
-				{/* Precio + CTA */}
-				<div className="flex items-center justify-between gap-4 border-t border-rule bg-paper px-5 py-4 md:flex-col md:justify-center md:gap-3 md:border-l md:border-t-0 md:p-5 md:text-center">
-					<div>
+				<div className="flex items-center justify-between gap-4 border-t border-rule px-5 py-4 sm:flex-col sm:items-stretch sm:justify-center sm:gap-3 sm:border-l sm:border-t-0 sm:p-5">
+					<div className="min-w-0">
 						{product.price ? (
-							<p className="font-display text-2xl font-bold leading-none">
+							<p className="font-display text-xl font-bold leading-none">
 								{product.price}
 							</p>
 						) : (
 							<p className="kicker text-fog">Disponible en Amazon</p>
 						)}
+						<p className="kicker mt-1 text-fog/70">Enlace afiliado</p>
 					</div>
 					<a
 						href={buildAmazonUrl(product.asin)}

@@ -9,7 +9,7 @@ services:
     environment:
       DATABASE_URL: postgres://cms:${POSTGRES_PASSWORD}@db:5432/tecnofreak
       NODE_ENV: production
-      AMAZON_TAG: ${AMAZON_TAG:-}
+      AMAZON_TAG: acierta100cia-21
     volumes:
       - /mnt/tecnofreak/media_data:/app/public/media
     expose:

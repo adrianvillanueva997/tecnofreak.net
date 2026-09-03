@@ -15,16 +15,17 @@ export default async function Productos() {
 	});
 
 	return (
-		<div className="mx-auto max-w-4xl px-4 pt-10 sm:px-6 pb-16">
-			<header className="border-b-2 border-teal pb-5">
-				<p className="kicker text-teal">Recomendados por tecnofreak.net</p>
-				<h1 className="font-display mt-3 text-[clamp(1.9rem,4.5vw,3rem)] font-bold leading-[1.08] tracking-tight">
-					Productos destacados
-				</h1>
-				<p className="mt-3 max-w-prose text-sm leading-relaxed text-fog">
-					Gadgets, componentes y herramientas que merecen la pena, con enlace
-					directo a Amazon. Los precios se revisan periódicamente y pueden
-					variar.
+		<div className="mx-auto max-w-5xl px-4 pb-16 pt-10 sm:px-6">
+			<header className="grid gap-6 border-b-2 border-teal pb-7 md:grid-cols-[1fr_16rem] md:items-end">
+				<div>
+					<p className="kicker text-teal">Selección editorial · Amazon</p>
+					<h1 className="font-display mt-3 max-w-2xl text-[clamp(2.2rem,5vw,4rem)] font-bold leading-[0.98] tracking-tight">
+						Herramientas que recomendamos
+					</h1>
+				</div>
+				<p className="max-w-prose text-sm leading-relaxed text-fog md:pb-1">
+					Una selección de productos relacionados con nuestras guías y análisis.
+					Los precios y la disponibilidad pueden cambiar en Amazon.
 				</p>
 			</header>
 

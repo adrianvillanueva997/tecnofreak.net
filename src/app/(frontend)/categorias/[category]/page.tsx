@@ -44,6 +44,7 @@ export default async function Categoria({ params: paramsPromise, searchParams }:
 		({ slug }) => slug === decodeURIComponent(categorySlug),
 	);
 	if (!category) notFound();
+	const parent = typeof category.parent === "object" && category.parent ? category.parent : null;
 
 	const children = new Map<number, number[]>();
 	for (const item of allCategories.docs) {
@@ -107,6 +108,24 @@ export default async function Categoria({ params: paramsPromise, searchParams }:
 
 	return (
 		<div className="mx-auto max-w-3xl px-4 pb-16 pt-10 sm:px-6">
+			<nav aria-label="Navegación de categorías" className="kicker mb-5 flex flex-wrap items-center gap-2 text-fog">
+				<Link href="/categorias" className="transition-colors duration-100 hover:text-teal">
+					Categorías
+				</Link>
+				<span aria-hidden="true">›</span>
+				{parent && (
+					<>
+						<Link
+							href={`/categorias/${parent.slug}`}
+							className="transition-colors duration-100 hover:text-teal"
+						>
+							{parent.title}
+						</Link>
+						<span aria-hidden="true">›</span>
+					</>
+				)}
+				<span className="text-ink">{category.title}</span>
+			</nav>
 			<header className="border-b-2 border-teal pb-5">
 				<p className="kicker text-teal">Categoría</p>
 				<h1 className="font-display mt-2 text-[clamp(1.9rem,4.5vw,3rem)] font-bold leading-[1.08] tracking-tight">
