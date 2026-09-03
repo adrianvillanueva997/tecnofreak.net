@@ -32,6 +32,7 @@ export default async function Categorias() {
 			if (typeof id === "number") counts.set(id, (counts.get(id) ?? 0) + 1);
 		}
 	}
+	const activeCategories = categories.docs.filter((category) => counts.has(category.id));
 
 	return (
 		<div className="mx-auto max-w-4xl px-4 pb-16 pt-10 sm:px-6">
@@ -41,11 +42,11 @@ export default async function Categorias() {
 					Categorías
 				</h1>
 				<p className="kicker mt-3 text-fog">
-					{categories.docs.length} categorías · explora los artículos por tema
+					{activeCategories.length} categorías con artículos publicados · explora por tema
 				</p>
 			</header>
 			<ul className="m-0 mt-6 flex list-none flex-wrap gap-2 p-0">
-				{categories.docs.map((category) => (
+				{activeCategories.map((category) => (
 					<li key={category.id}>
 						<Link
 							href={`/categorias/${category.slug}`}
