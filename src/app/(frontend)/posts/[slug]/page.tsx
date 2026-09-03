@@ -61,6 +61,13 @@ export default async function Post({ params: paramsPromise }: Args) {
 				slug: string;
 			}>)
 		: [];
+	const tags = Array.isArray(post.tags)
+		? (post.tags.filter((tag) => typeof tag === "object") as Array<{
+				id: number;
+				title: string;
+				slug: string;
+			}>)
+		: [];
 	const hero =
 		post.heroImage && typeof post.heroImage === "object"
 			? post.heroImage
@@ -150,10 +157,19 @@ export default async function Post({ params: paramsPromise }: Args) {
 						{cats.map((c) => (
 							<Link
 								key={c.id}
-								href={`/etiquetas/${c.slug}`}
+								href={`/categorias/${c.slug}`}
 								className="kicker text-fog transition-colors duration-100 hover:text-teal"
 							>
 								{c.title}
+							</Link>
+						))}
+						{tags.map((tag) => (
+							<Link
+								key={tag.id}
+								href={`/etiquetas/${tag.slug}`}
+								className="kicker text-teal transition-colors duration-100 hover:text-ink"
+							>
+								#{tag.title}
 							</Link>
 						))}
 					</div>

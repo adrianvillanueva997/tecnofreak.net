@@ -18,6 +18,7 @@ import { post3 } from "./post-3";
 
 const collections: CollectionSlug[] = [
 	"categories",
+	"tags",
 	"media",
 	"pages",
 	"posts",

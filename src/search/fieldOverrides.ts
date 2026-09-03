@@ -58,4 +58,17 @@ export const searchFields: Field[] = [
 			},
 		],
 	},
+	{
+		label: "Tags",
+		name: "tags",
+		type: "array",
+		admin: {
+			readOnly: true,
+		},
+		fields: [
+			{ name: "relationTo", type: "text" },
+			{ name: "tagID", type: "text" },
+			{ name: "title", type: "text" },
+		],
+	},
 ];

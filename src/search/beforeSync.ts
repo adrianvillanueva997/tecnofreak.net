@@ -9,7 +9,7 @@ export const beforeSyncWithSearch: BeforeSync = async ({
 		doc: { relationTo: collection },
 	} = searchDoc;
 
-	const { slug, id, categories, title, meta } = originalDoc;
+	const { slug, id, categories, tags, title, meta } = originalDoc;
 
 	const modifiedDoc: DocToSync = {
 		...searchDoc,
@@ -21,6 +21,7 @@ export const beforeSyncWithSearch: BeforeSync = async ({
 			description: meta?.description,
 		},
 		categories: [],
+		tags: [],
 	};
 
 	if (categories && Array.isArray(categories) && categories.length > 0) {
@@ -56,6 +57,34 @@ export const beforeSyncWithSearch: BeforeSync = async ({
 		modifiedDoc.categories = populatedCategories.map((each) => ({
 			relationTo: "categories",
 			categoryID: String(each.id),
+			title: each.title,
+		}));
+	}
+
+	if (tags && Array.isArray(tags) && tags.length > 0) {
+		const populatedTags: { id: string | number; title: string }[] = [];
+		for (const tag of tags) {
+			if (!tag) continue;
+			if (typeof tag === "object") {
+				populatedTags.push(tag);
+				continue;
+			}
+
+			const doc = await req.payload.findByID({
+				collection: "tags",
+				id: tag,
+				disableErrors: true,
+				depth: 0,
+				select: { title: true },
+				req,
+			});
+
+			if (doc !== null) populatedTags.push(doc);
+		}
+
+		modifiedDoc.tags = populatedTags.map((each) => ({
+			relationTo: "tags",
+			tagID: String(each.id),
 			title: each.title,
 		}));
 	}
