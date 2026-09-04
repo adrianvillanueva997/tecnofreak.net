@@ -12,6 +12,7 @@ services:
       AMAZON_TAG: acierta100cia-21
     volumes:
       - /mnt/tecnofreak/media_data:/app/public/media
+      - next_cache:/app/.next/cache
     expose:
       - "3000"
     read_only: true
@@ -84,3 +85,6 @@ networks:
     external: true
   postgres_network:
     external: true
+
+volumes:
+  next_cache:
