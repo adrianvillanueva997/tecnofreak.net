@@ -1,10 +1,20 @@
 services:
+  media-init:
+    image: ghcr.io/adrianvillanueva997/tecnofreak.net:latest
+    restart: "no"
+    command: ["sh", "-c", "mkdir -p /media && chown -R 1000:1000 /media"]
+    volumes:
+      - /mnt/tecnofreak/media_data:/media
+    user: "0:0"
+
   cms:
     image: ghcr.io/adrianvillanueva997/tecnofreak.net:latest
     restart: unless-stopped
     depends_on:
       db:
         condition: service_healthy
+      media-init:
+        condition: service_completed_successfully
     env_file: .env
     environment:
       DATABASE_URL: postgres://cms:${POSTGRES_PASSWORD}@db:5432/tecnofreak
