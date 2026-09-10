@@ -10,10 +10,7 @@ export async function GET() {
 	try {
 		await Promise.all([
 			access(path.join(process.cwd(), "public/media"), constants.W_OK),
-			access(
-				path.join(process.cwd(), ".next/cache/images"),
-				constants.W_OK,
-			),
+			access(path.join(process.cwd(), ".next/cache"), constants.W_OK),
 		]);
 		await (await payload).find({ collection: "media", depth: 0, limit: 1 });
 
