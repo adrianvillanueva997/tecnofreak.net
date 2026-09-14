@@ -451,6 +451,7 @@ export interface Product {
    */
   asin: string;
   brand?: string | null;
+  category?: (number | null) | Category;
   /**
    * Precio a mostrar (texto libre, p. ej. «49,99 €»). Edítalo manualmente.
    */
@@ -1440,6 +1441,7 @@ export interface ProductsSelect<T extends boolean = true> {
   title?: T;
   asin?: T;
   brand?: T;
+  category?: T;
   price?: T;
   rating?: T;
   image?: T;

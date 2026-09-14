@@ -15,7 +15,7 @@ export interface LoginOptions {
  */
 export async function login({
 	page,
-	serverURL = "http://localhost:3000",
+	serverURL = process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:3000",
 	user,
 }: LoginOptions): Promise<void> {
 	await page.goto(`${serverURL}/admin/login`);
@@ -25,7 +25,5 @@ export async function login({
 	await page.click('button[type="submit"]');
 
 	await page.waitForURL(`${serverURL}/admin`);
-
-	const dashboardArtifact = page.locator('span[title="Dashboard"]');
-	await expect(dashboardArtifact).toBeVisible();
+	await expect(page.getByRole("heading", { name: /welcome to your dashboard/i })).toBeVisible();
 }
