@@ -64,6 +64,14 @@ jobs:
       - name: Apply database migrations
         run: pnpm payload migrate
 
+      - name: Print test runtime
+        run: |
+          node --version
+          pnpm --version
+          git rev-parse HEAD
+          pnpm exec vitest --version
+          node -e "console.log('vitest environment: node')"
+
       - name: Run integration tests
         run: pnpm test:int
 
