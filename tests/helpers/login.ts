@@ -1,4 +1,5 @@
 import type { Page } from "@playwright/test";
+import { expect } from "@playwright/test";
 
 export interface LoginOptions {
 	page: Page;
@@ -24,4 +25,5 @@ export async function login({
 	await page.click('button[type="submit"]');
 
 	await page.waitForURL(`${serverURL}/admin`);
+	await expect(page.getByRole("heading", { name: /welcome to your dashboard/i })).toBeVisible();
 }

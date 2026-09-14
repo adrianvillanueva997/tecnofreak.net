@@ -21,7 +21,7 @@ test.describe("Admin Panel", () => {
 	test("can navigate to dashboard", async () => {
 		await page.goto("/admin");
 		await expect(page).toHaveURL(/\/admin$/);
-		await expect(page.getByRole("heading", { name: /dashboard/i })).toBeVisible();
+		await expect(page.getByRole("heading", { name: /welcome to your dashboard/i })).toBeVisible();
 	});
 
 	test("can navigate to list view", async () => {
