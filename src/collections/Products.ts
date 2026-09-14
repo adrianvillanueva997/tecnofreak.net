@@ -35,6 +35,15 @@ export const Products: CollectionConfig = {
 			type: "text",
 		},
 		{
+			name: "category",
+			type: "relationship",
+			relationTo: "categories",
+			admin: {
+				allowCreate: true,
+				position: "sidebar",
+			},
+		},
+		{
 			name: "price",
 			type: "text",
 			admin: {

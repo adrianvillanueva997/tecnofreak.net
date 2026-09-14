@@ -15,7 +15,11 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  checks:
+    uses: ./.github/workflows/checks.yml
+
   build:
+    needs: checks
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -31,58 +35,47 @@ jobs:
           --health-interval 5s
           --health-timeout 5s
           --health-retries 10
-
     env:
       DATABASE_URL: postgres://postgres:password@127.0.0.1:5432/tecnofreak
       PAYLOAD_SECRET: ci-build-secret-not-for-prod
-      NEXT_PUBLIC_SERVER_URL: https://cms.tecnofreak.net
-      NEXT_TELEMETRY_DISABLED: 1
+      NEXT_PUBLIC_SERVER_URL: http://127.0.0.1:3000
 
     steps:
       - uses: actions/checkout@v7
 
-      - uses: pnpm/action-setup@v6
-
-      - uses: actions/setup-node@v7
+      - name: Download Next build
+        uses: actions/download-artifact@v4
         with:
-          cache: pnpm
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Apply database schema
-        run: pnpm payload migrate
-
-      - name: Build Next.js
-        run: pnpm build
+          name: next-build
+          path: .next
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v4
 
-      - name: Build Docker image (no push)
+      - name: Build Docker image
         uses: docker/build-push-action@v7
         with:
           context: .
-          push: false
           load: true
           tags: tecnofreak:ci-${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Test image starts
+      - name: Smoke-test Docker image
         run: |
-          docker run --rm -d --name tecnofreak-ci-test \
-            -p 3200:3000 \
+          set -eu
+          docker run --rm -d --network host --name tecnofreak-ci-test \
             -e DATABASE_URL="$DATABASE_URL" \
             -e PAYLOAD_SECRET="$PAYLOAD_SECRET" \
             -e NEXT_PUBLIC_SERVER_URL="$NEXT_PUBLIC_SERVER_URL" \
             tecnofreak:ci-${{ github.sha }}
-          for i in $(seq 1 20); do
-            if curl -sf http://localhost:3200/api/health 2>/dev/null || curl -sf http://localhost:3200/ >/dev/null; then
+          trap 'docker rm -f tecnofreak-ci-test || true' EXIT
+          for i in $(seq 1 30); do
+            if curl -sf http://127.0.0.1:3000/ >/dev/null; then
               echo "container healthy"
-              break
+              exit 0
             fi
-            sleep 3
+            sleep 2
           done
-          docker logs tecnofreak-ci-test --tail 20 || true
-          docker rm -f tecnofreak-ci-test || true
+          docker logs tecnofreak-ci-test
+          exit 1
