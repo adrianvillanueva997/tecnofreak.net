@@ -110,7 +110,7 @@ jobs:
           load: ${{ github.ref != 'refs/heads/main' }}
           push: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/main' }}
           tags: |
-            tecnofreak:ci-${{ github.sha }}
+            ghcr.io/${{ github.repository }}:ci-${{ github.sha }}
             ghcr.io/${{ github.repository }}:latest
             ghcr.io/${{ github.repository }}:${{ github.sha }}
           cache-from: type=gha
@@ -124,7 +124,7 @@ jobs:
             -e DATABASE_URL="$DATABASE_URL" \
             -e PAYLOAD_SECRET="$PAYLOAD_SECRET" \
             -e NEXT_PUBLIC_SERVER_URL="$NEXT_PUBLIC_SERVER_URL" \
-            tecnofreak:ci-${{ github.sha }}
+            ghcr.io/${{ github.repository }}:ci-${{ github.sha }}
           trap 'docker rm -f tecnofreak-ci-test || true' EXIT
           for i in $(seq 1 30); do
             if curl -sf http://127.0.0.1:3000/ >/dev/null; then
