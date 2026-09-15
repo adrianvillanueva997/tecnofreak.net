@@ -1,12 +1,9 @@
 import canUseDOM from "./canUseDOM";
 
 export const getServerSideURL = () => {
-	return (
-		process.env.NEXT_PUBLIC_SERVER_URL ||
-		(process.env.VERCEL_PROJECT_PRODUCTION_URL
-			? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-			: "http://localhost:3000")
-	);
+	if (process.env.NEXT_PUBLIC_SITE_URL) return process.env.NEXT_PUBLIC_SITE_URL;
+	if (process.env.NODE_ENV === "production") return "https://tecnofreak.net";
+	return process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:3000";
 };
 
 export const getClientSideURL = () => {

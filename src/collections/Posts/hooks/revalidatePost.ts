@@ -5,15 +5,29 @@ import type {
 } from "payload";
 
 import type { Post } from "../../../payload-types";
+import { createSlugRedirect } from "../../../utilities/createSlugRedirect";
 
-export const revalidatePost: CollectionAfterChangeHook<Post> = ({
+export const revalidatePost: CollectionAfterChangeHook<Post> = async ({
 	doc,
 	previousDoc,
 	req: { payload, context },
 }) => {
 	if (!context.disableRevalidate) {
+		if (
+			previousDoc?._status === "published" &&
+			doc._status === "published" &&
+			previousDoc.slug !== doc.slug
+		) {
+			await createSlugRedirect({
+				payload,
+				from: `/${previousDoc.slug}`,
+				to: `/${doc.slug}`,
+			});
+			revalidatePath(`/${previousDoc.slug}`);
+		}
+
 		if (doc._status === "published") {
-			const path = `/posts/${doc.slug}`;
+			const path = `/${doc.slug}`;
 
 			payload.logger.info(`Revalidating post at path: ${path}`);
 
@@ -22,8 +36,8 @@ export const revalidatePost: CollectionAfterChangeHook<Post> = ({
 		}
 
 		// If the post was previously published, we need to revalidate the old path
-		if (previousDoc._status === "published" && doc._status !== "published") {
-			const oldPath = `/posts/${previousDoc.slug}`;
+		if (previousDoc?._status === "published" && doc._status !== "published") {
+			const oldPath = `/${previousDoc.slug}`;
 
 			payload.logger.info(`Revalidating old post at path: ${oldPath}`);
 
@@ -39,7 +53,7 @@ export const revalidateDelete: CollectionAfterDeleteHook<Post> = ({
 	req: { context },
 }) => {
 	if (!context.disableRevalidate) {
-		const path = `/posts/${doc?.slug}`;
+		const path = `/${doc?.slug}`;
 
 		revalidatePath(path);
 		revalidateTag("posts-sitemap", "max");

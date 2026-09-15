@@ -4,6 +4,7 @@ import type { Metadata } from "next/types";
 export const metadata: Metadata = {
 	title: "Acerca de",
 	description: "Qué es tecnofreak.net y cómo está hecho.",
+	alternates: { canonical: "/acerca" },
 };
 
 export default function Acerca() {

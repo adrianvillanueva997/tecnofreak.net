@@ -44,5 +44,6 @@ export function generateMetadata(): Metadata {
 		title: "Productos destacados",
 		description:
 			"Gadgets y herramientas recomendadas en tecnofreak.net, con enlaces de afiliado.",
+		alternates: { canonical: "/productos" },
 	};
 }

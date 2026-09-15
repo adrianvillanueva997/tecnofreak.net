@@ -30,7 +30,7 @@ export default async function LegacyRedirect({ params: paramsPromise }: Args) {
 				and: [{ slug: { equals: last } }, { _status: { equals: "published" } }],
 			},
 		});
-		if (match.docs[0]) redirect(`/posts/${match.docs[0].slug}`);
+		if (match.docs[0]) redirect(`/${match.docs[0].slug}`);
 	}
 
 	return <PayloadRedirects url={`/${legacy.join("/")}`} />;

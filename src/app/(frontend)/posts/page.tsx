@@ -42,5 +42,6 @@ export function generateMetadata(): Metadata {
 		title: "Todas las noticias",
 		description:
 			"Archivo completo de artículos de tecnofreak.net, filtrable por año.",
+		alternates: { canonical: "/posts" },
 	};
 }

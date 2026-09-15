@@ -106,10 +106,16 @@ gtag('config', 'G-DBZL4P68SP');`}
 
 export const metadata: Metadata = {
 	metadataBase: new URL(getServerSideURL()),
+	alternates: { canonical: "/" },
 	title: {
 		default: "tecnofreak.net — Blog de tecnología en español",
 		template: "%s | tecnofreak.net",
 	},
 	description: "Noticias, análisis y opiniones sobre tecnología en español.",
 	openGraph: mergeOpenGraph(),
+	twitter: {
+		card: "summary_large_image",
+		description: "Noticias, análisis y opiniones sobre tecnología en español.",
+		title: "tecnofreak.net — Blog de tecnología en español",
+	},
 };

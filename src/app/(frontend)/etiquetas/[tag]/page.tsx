@@ -85,5 +85,6 @@ export async function generateMetadata({
 	return {
 		title: `Etiqueta: ${decodeURIComponent(tagSlug)}`,
 		description: `Artículos etiquetados en tecnofreak.net`,
+		alternates: { canonical: `/etiquetas/${encodeURIComponent(tagSlug)}` },
 	};
 }

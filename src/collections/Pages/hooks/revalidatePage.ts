@@ -5,13 +5,25 @@ import type {
 } from "payload";
 
 import type { Page } from "../../../payload-types";
+import { createSlugRedirect } from "../../../utilities/createSlugRedirect";
 
-export const revalidatePage: CollectionAfterChangeHook<Page> = ({
+export const revalidatePage: CollectionAfterChangeHook<Page> = async ({
 	doc,
 	previousDoc,
 	req: { payload, context },
 }) => {
 	if (!context.disableRevalidate) {
+		if (
+			previousDoc?._status === "published" &&
+			doc._status === "published" &&
+			previousDoc.slug !== doc.slug
+		) {
+			const oldPath = previousDoc.slug === "home" ? "/" : `/${previousDoc.slug}`;
+			const newPath = doc.slug === "home" ? "/" : `/${doc.slug}`;
+			await createSlugRedirect({ payload, from: oldPath, to: newPath });
+			revalidatePath(oldPath);
+		}
+
 		if (doc._status === "published") {
 			const path = doc.slug === "home" ? "/" : `/${doc.slug}`;
 

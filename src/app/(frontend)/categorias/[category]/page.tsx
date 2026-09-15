@@ -186,10 +186,14 @@ export default async function Categoria({ params: paramsPromise, searchParams }:
 
 export async function generateMetadata({
 	params: paramsPromise,
+	searchParams: searchParamsPromise,
 }: Args): Promise<Metadata> {
 	const { category } = await paramsPromise;
+	const { all } = await searchParamsPromise;
 	return {
 		title: `Categoría: ${decodeURIComponent(category)}`,
 		description: "Artículos de tecnofreak.net por categoría.",
+		alternates: { canonical: `/categorias/${encodeURIComponent(category)}` },
+		robots: all === "1" ? { index: false, follow: true } : undefined,
 	};
 }
