@@ -24,25 +24,35 @@ export const generateMeta = async (args: {
 	const { doc } = args;
 
 	const ogImage = getImageURL(doc?.meta?.image);
+	const path =
+		doc?.slug === "home" ? "/" : typeof doc?.slug === "string" ? `/${doc.slug}` : "/";
+	const description =
+		doc?.meta?.description ||
+		(typeof doc?.title === "string"
+			? `${doc.title} en tecnofreak.net.`
+			: "Noticias, análisis y opiniones sobre tecnología en español.");
 
 	const title = doc?.meta?.title
-		? `${doc?.meta?.title} | Payload Website Template`
-		: "Payload Website Template";
+		? doc.meta.title
+		: doc?.title || "tecnofreak.net";
 
 	return {
-		description: doc?.meta?.description,
+		alternates: { canonical: path },
+		description,
 		openGraph: mergeOpenGraph({
-			description: doc?.meta?.description || "",
+			description,
 			images: ogImage
 				? [
 						{
 							url: ogImage,
+							alt: title,
 						},
 					]
 				: undefined,
 			title,
-			url: Array.isArray(doc?.slug) ? doc?.slug.join("/") : "/",
+			url: path,
 		}),
 		title,
+		twitter: { card: "summary_large_image", title, description },
 	};
 };

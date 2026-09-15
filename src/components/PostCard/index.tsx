@@ -31,7 +31,7 @@ export const PostCard: React.FC<{
 		return (
 			<article className="group">
 				<Link
-					href={`/posts/${post.slug}`}
+					href={`/${post.slug}`}
 					className="grid grid-cols-[7rem_1fr] items-start gap-4"
 					aria-label={post.title}
 				>
@@ -77,7 +77,7 @@ export const PostCard: React.FC<{
 	return (
 		<article className={`group flex flex-col ${lead ? "rise" : ""}`}>
 			<Link
-				href={`/posts/${post.slug}`}
+				href={`/${post.slug}`}
 				className="flex h-full flex-col"
 				aria-label={post.title}
 			>

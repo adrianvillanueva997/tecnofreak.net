@@ -94,5 +94,6 @@ export function generateMetadata(): Metadata {
 	return {
 		title: "Buscar",
 		description: "Busca en todas las noticias de tecnofreak.net.",
+		robots: { index: false, follow: true },
 	};
 }

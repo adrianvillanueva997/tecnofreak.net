@@ -65,5 +65,6 @@ export async function generateMetadata({
 	return {
 		title: `Noticias de ${year}`,
 		description: `Todos los artículos de tecnofreak.net publicados en ${year}.`,
+		alternates: { canonical: `/posts/year/${year}` },
 	};
 }

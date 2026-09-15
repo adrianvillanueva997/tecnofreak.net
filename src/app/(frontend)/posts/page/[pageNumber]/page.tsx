@@ -59,5 +59,6 @@ export async function generateMetadata({
 		title: `Todas las noticias — página ${pageNumber}`,
 		description:
 			"Archivo completo de artículos de tecnofreak.net, filtrable por año.",
+		alternates: { canonical: `/posts/page/${pageNumber}` },
 	};
 }

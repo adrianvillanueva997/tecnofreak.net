@@ -6,6 +6,7 @@ import { cache } from "react";
 import { RenderBlocks } from "@/blocks/RenderBlocks";
 import { LivePreviewListener } from "@/components/LivePreviewListener";
 import { PayloadRedirects } from "@/components/PayloadRedirects";
+import PostPage, { generatePostMetadata } from "@/components/PostPage";
 import { homeStatic } from "@/endpoints/seed/home-static";
 import { RenderHero } from "@/heros/RenderHero";
 import { generateMeta } from "@/utilities/generateMeta";
@@ -36,9 +37,7 @@ export default async function Page({ params: paramsPromise }: Args) {
 		page = homeStatic;
 	}
 
-	if (!page) {
-		return <PayloadRedirects url={url} />;
-	}
+	if (!page) return <PostPage slug={decodedSlug} />;
 
 	const { hero, layout } = page;
 
@@ -66,7 +65,7 @@ export async function generateMetadata({
 		slug: decodedSlug,
 	});
 
-	return generateMeta({ doc: page });
+	return page ? generateMeta({ doc: page }) : generatePostMetadata(decodedSlug);
 }
 
 const queryPageBySlug = cache(async ({ slug }: { slug: string }) => {

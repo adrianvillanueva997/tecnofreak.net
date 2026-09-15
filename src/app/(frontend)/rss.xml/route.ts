@@ -1,9 +1,8 @@
 import configPromise from "@payload-config";
 import { getPayload } from "payload";
+import { getServerSideURL } from "@/utilities/getURL";
 
 export const dynamic = "force-dynamic";
-
-const SITE_URL = process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:3000";
 
 function escapeXml(s: string): string {
 	return s
@@ -16,6 +15,7 @@ function escapeXml(s: string): string {
 
 export async function GET() {
 	const payload = await getPayload({ config: configPromise });
+	const SITE_URL = getServerSideURL();
 	const posts = await payload.find({
 		collection: "posts",
 		draft: false,
@@ -29,7 +29,7 @@ export async function GET() {
 
 	const items = posts.docs
 		.map((post) => {
-			const url = `${SITE_URL}/posts/${post.slug}`;
+			const url = `${SITE_URL}/${post.slug}`;
 			const description = post.meta?.description ?? "";
 			return `    <item>
       <title>${escapeXml(post.title)}</title>

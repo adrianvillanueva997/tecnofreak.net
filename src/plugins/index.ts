@@ -17,9 +17,7 @@ import { searchFields } from "@/search/fieldOverrides";
 import { getServerSideURL } from "@/utilities/getURL";
 
 const generateTitle: GenerateTitle<Post | Page> = ({ doc }) => {
-	return doc?.title
-		? `${doc.title} | Payload Website Template`
-		: "Payload Website Template";
+	return doc?.title || "tecnofreak.net";
 };
 
 const generateURL: GenerateURL<Post | Page> = ({ doc }) => {
@@ -54,7 +52,10 @@ export const plugins: Plugin[] = [
 	}),
 	nestedDocsPlugin({
 		collections: ["categories"],
-		generateURL: (docs) => docs.reduce((url, doc) => `${url}/${doc.slug}`, ""),
+		generateURL: (docs) => {
+			const slug = docs.at(-1)?.slug;
+			return slug ? `/categorias/${slug}` : "/categorias";
+		},
 	}),
 	seoPlugin({
 		generateTitle,

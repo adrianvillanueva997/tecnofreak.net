@@ -63,5 +63,6 @@ export function generateMetadata(): Metadata {
 	return {
 		title: "Etiquetas",
 		description: "Explora los artículos de tecnofreak.net por etiqueta.",
+		alternates: { canonical: "/etiquetas" },
 	};
 }

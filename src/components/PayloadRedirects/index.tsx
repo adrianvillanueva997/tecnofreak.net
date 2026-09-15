@@ -1,4 +1,4 @@
-import { notFound, redirect } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import type React from "react";
 import type { Page, Post } from "@/payload-types";
 import { getCachedDocument } from "@/utilities/getDocument";
@@ -20,7 +20,7 @@ export const PayloadRedirects: React.FC<Props> = async ({
 
 	if (redirectItem) {
 		if (redirectItem.to?.url) {
-			redirect(redirectItem.to.url);
+			permanentRedirect(redirectItem.to.url);
 		}
 
 		let redirectUrl: string;
@@ -32,18 +32,16 @@ export const PayloadRedirects: React.FC<Props> = async ({
 			const document = (await getCachedDocument(collection, id)()) as
 				| Page
 				| Post;
-			redirectUrl = `${redirectItem.to?.reference?.relationTo !== "pages" ? `/${redirectItem.to?.reference?.relationTo}` : ""}/${
-				document?.slug
-			}`;
+			redirectUrl = `/${document?.slug}`;
 		} else {
-			redirectUrl = `${redirectItem.to?.reference?.relationTo !== "pages" ? `/${redirectItem.to?.reference?.relationTo}` : ""}/${
+			redirectUrl = `/${
 				typeof redirectItem.to?.reference?.value === "object"
 					? redirectItem.to?.reference?.value?.slug
 					: ""
 			}`;
 		}
 
-		if (redirectUrl) redirect(redirectUrl);
+		if (redirectUrl) permanentRedirect(redirectUrl);
 	}
 
 	if (disableNotFound) return null;
