@@ -9,6 +9,7 @@ import { AdBanner } from "@/components/AdBanner";
 import { CommentsSection } from "@/components/Comments";
 import { LivePreviewListener } from "@/components/LivePreviewListener";
 import { Media } from "@/components/Media";
+import { NewsletterBanner } from "@/components/NewsletterBanner";
 import { PayloadRedirects } from "@/components/PayloadRedirects";
 import { PostCard } from "@/components/PostCard";
 import RichText from "@/components/RichText";
@@ -304,6 +305,8 @@ export default async function PostPage({ slug }: { slug: string }) {
 				</div>
 
 				<AdBanner />
+
+				<NewsletterBanner />
 
 				<CommentsSection postId={post.id} />
 			</article>

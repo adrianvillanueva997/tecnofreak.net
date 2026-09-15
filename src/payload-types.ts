@@ -1936,10 +1936,28 @@ export interface BannerBlock {
  */
 export interface CodeBlock {
   language?: ('typescript' | 'javascript' | 'css') | null;
+  /**
+   * Escribe o pega el código. Se formatea en el artículo según el lenguaje elegido.
+   */
   code: string;
   id?: string | null;
   blockName?: string | null;
   blockType: 'code';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "KeyTakeawaysBlock".
+ */
+export interface KeyTakeawaysBlock {
+  items?:
+    | {
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'keyTakeaways';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1953,6 +1971,32 @@ export interface ProductBoxBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'productBox';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "QuoteBlock".
+ */
+export interface QuoteBlock {
+  quote: string;
+  attribution?: string | null;
+  sourceUrl?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'quote';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "YouTubeBlock".
+ */
+export interface YouTubeBlock {
+  /**
+   * Acepta enlaces youtube.com/watch, youtu.be, /shorts/ y /embed/.
+   */
+  url: string;
+  title?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'youtube';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

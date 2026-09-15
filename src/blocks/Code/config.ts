@@ -25,9 +25,12 @@ export const Code: Block = {
 		},
 		{
 			name: "code",
-			type: "code",
+			type: "textarea",
 			label: false,
 			required: true,
+			admin: {
+				description: "Escribe o pega el código. Se formatea en el artículo según el lenguaje elegido.",
+			},
 		},
 	],
 };
