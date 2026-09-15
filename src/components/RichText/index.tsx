@@ -11,16 +11,21 @@ import {
 } from "@payloadcms/richtext-lexical/react";
 import { BannerBlock } from "@/blocks/Banner/Component";
 import { CallToActionBlock } from "@/blocks/CallToAction/Component";
-
 import { CodeBlock, type CodeBlockProps } from "@/blocks/Code/Component";
+import { KeyTakeawaysBlock } from "@/blocks/KeyTakeaways/Component";
 import { MediaBlock } from "@/blocks/MediaBlock/Component";
 import { ProductBoxBlock } from "@/blocks/ProductBox/Component";
+import { QuoteBlock } from "@/blocks/Quote/Component";
+import { YouTubeBlock } from "@/blocks/YouTube/Component";
 import { Media } from "@/components/Media";
 import type {
 	BannerBlock as BannerBlockProps,
 	CallToActionBlock as CTABlockProps,
+	KeyTakeawaysBlock as KeyTakeawaysBlockProps,
 	MediaBlock as MediaBlockProps,
 	ProductBoxBlock as ProductBoxBlockProps,
+	QuoteBlock as QuoteBlockProps,
+	YouTubeBlock as YouTubeBlockProps,
 } from "@/payload-types";
 import { cn } from "@/utilities/ui";
 
@@ -31,7 +36,10 @@ type NodeTypes =
 			| MediaBlockProps
 			| BannerBlockProps
 			| CodeBlockProps
+			| KeyTakeawaysBlockProps
 			| ProductBoxBlockProps
+			| QuoteBlockProps
+			| YouTubeBlockProps
 	  >;
 
 const internalDocToHref = ({ linkNode }: { linkNode: SerializedLinkNode }) => {
@@ -85,7 +93,10 @@ const jsxConverters: JSXConvertersFunction<NodeTypes> = ({
 		),
 		code: ({ node }) => <CodeBlock className="col-start-2" {...node.fields} />,
 		cta: ({ node }) => <CallToActionBlock {...node.fields} />,
+		keyTakeaways: ({ node }) => <KeyTakeawaysBlock {...node.fields} />,
 		productBox: ({ node }) => <ProductBoxBlock {...node.fields} />,
+		quote: ({ node }) => <QuoteBlock {...node.fields} />,
+		youtube: ({ node }) => <YouTubeBlock {...node.fields} />,
 	},
 });
 
