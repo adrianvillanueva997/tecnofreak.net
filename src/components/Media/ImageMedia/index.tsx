@@ -77,7 +77,7 @@ export const ImageMedia: React.FC<MediaProps> = (props) => {
 
 	const isPriority = !!priority;
 	return (
-		<picture className={cn("block max-w-full", pictureClassName)}>
+		<picture className={cn("block w-full min-w-0 max-w-full", pictureClassName)}>
 			<NextImage
 				alt={alt || ""}
 				className={cn(!fill && "h-auto max-w-full w-full", imgClassName)}
