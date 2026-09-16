@@ -78,12 +78,12 @@ export const PostCard: React.FC<{
 		<article className={`group flex flex-col ${lead ? "rise" : ""}`}>
 			<Link
 				href={`/${post.slug}`}
-				className="flex h-full flex-col"
+				className={`flex h-full flex-col ${lead ? "md:grid md:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] md:items-center md:gap-8" : ""}`}
 				aria-label={post.title}
 			>
 				<div
 					className={`relative overflow-hidden bg-paper-2 ${
-						lead ? "aspect-[2/1]" : "aspect-[16/9]"
+						lead ? "aspect-[16/9] md:aspect-[4/3]" : "aspect-[16/9]"
 					}`}
 				>
 					{hero ? (
@@ -109,7 +109,7 @@ export const PostCard: React.FC<{
 						</span>
 					)}
 				</div>
-				<div className="flex grow flex-col pt-3">
+				<div className={`flex flex-col pt-3 ${lead ? "md:pt-0" : "grow"}`}>
 					{tag && <p className="kicker text-teal">{tag.title}</p>}
 					<h3
 						className={`font-display mt-1.5 font-bold leading-[1.12] tracking-tight transition-colors duration-100 group-hover:text-teal ${
@@ -136,6 +136,9 @@ export const PostCard: React.FC<{
 						>
 							{formatDate(post.publishedAt)}
 						</time>
+						{lead && (
+							<span className="link-more mt-4 inline-block text-sm">Leer artículo</span>
+						)}
 					</div>
 				</div>
 			</Link>
