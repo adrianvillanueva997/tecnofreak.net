@@ -37,6 +37,10 @@ export default defineConfig({
 			name: "chromium",
 			use: { ...devices["Desktop Chrome"], channel: "chromium" },
 		},
+		{
+			name: "firefox",
+			use: { ...devices["Desktop Firefox"] },
+		},
 	],
 	webServer: {
 		command: process.env.CI ? "pnpm start" : "pnpm dev",
