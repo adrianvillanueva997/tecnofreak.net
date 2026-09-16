@@ -141,7 +141,7 @@ export const PostCard: React.FC<{
 							{formatDate(post.publishedAt)}
 						</time>
 						{lead && (
-							<span className="link-more mt-4 inline-block text-sm">Leer artículo</span>
+							<span className="link-more mt-4 block text-sm">Leer artículo</span>
 						)}
 					</div>
 				</div>
