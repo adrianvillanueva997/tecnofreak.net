@@ -6,7 +6,7 @@ import { PostCard } from "@/components/PostCard";
 
 export const dynamic = "force-dynamic";
 
-const SECONDARY = 3;
+const SECONDARY = 4;
 const FEED = 9;
 const TOP_TAGS = 12;
 
@@ -77,7 +77,7 @@ export default async function HomePage() {
 				>
 					<PostCard post={featured} variant="lead" loading="eager" />
 					{secondary.length > 0 && (
-						<div className="grid content-start gap-6 md:border-l md:border-rule md:pl-8">
+						<div className="grid content-start gap-5 md:border-l md:border-rule md:pl-8">
 							<p className="kicker text-fog">También destacamos</p>
 							{secondary.map((post) => (
 								<PostCard key={post.id} post={post} variant="compact" />
@@ -105,7 +105,7 @@ export default async function HomePage() {
 							<h2 className="font-display border-b-2 border-teal pb-2 text-lg font-bold uppercase tracking-wide">
 								Últimas noticias
 							</h2>
-							<div className="mt-6 grid gap-x-6 gap-y-10 sm:grid-cols-2">
+							<div className="mt-6 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
 								{feed.map((post) => (
 									<PostCard key={post.id} post={post} />
 								))}
