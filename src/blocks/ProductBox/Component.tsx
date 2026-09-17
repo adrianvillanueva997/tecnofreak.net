@@ -22,7 +22,7 @@ export const ProductBoxBlock: React.FC<Props> = ({ product }) => {
 	return (
 		<article className="not-prose group my-6 break-words overflow-hidden border-t-2 border-teal bg-paper transition-colors duration-100 hover:bg-paper-2">
 			<div className="flex h-full flex-col sm:flex-row">
-				<div className="flex aspect-[4/3] w-full items-center justify-center bg-white p-5 sm:aspect-auto sm:w-36 sm:shrink-0 sm:self-stretch">
+				<div className="flex min-h-0 aspect-[4/3] w-full items-center justify-center bg-white p-5 sm:aspect-auto sm:w-36 sm:shrink-0 sm:self-stretch">
 					{product.image && typeof product.image === "object" ? (
 						<Media
 							resource={product.image}
