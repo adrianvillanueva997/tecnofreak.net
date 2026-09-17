@@ -22,12 +22,13 @@ export const ProductBoxBlock: React.FC<Props> = ({ product }) => {
 	return (
 		<article className="not-prose group my-6 break-words overflow-hidden border-t-2 border-teal bg-paper transition-colors duration-100 hover:bg-paper-2">
 			<div className="flex h-full flex-col sm:flex-row">
-				<div className="flex min-h-0 aspect-[4/3] w-full items-center justify-center bg-white p-5 sm:aspect-auto sm:w-36 sm:shrink-0 sm:self-stretch">
+				<div className="flex min-h-0 min-w-0 aspect-[4/3] w-full items-center justify-center bg-white p-5 sm:aspect-auto sm:w-36 sm:shrink-0 sm:self-stretch">
 					{product.image && typeof product.image === "object" ? (
 						<Media
 							resource={product.image}
-							className="h-full w-full"
-							imgClassName="max-h-full min-h-0 w-full object-contain"
+							className="h-full min-w-0 w-full"
+							size="(max-width: 639px) 100vw, 9rem"
+							imgClassName="block h-auto max-h-full max-w-full min-w-0 w-full object-contain"
 						/>
 					) : (
 						<span

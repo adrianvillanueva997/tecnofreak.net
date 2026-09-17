@@ -1,0 +1,138 @@
+/* Site-native admin login: paper, ink, teal, and editorial rules. */
+
+:root {
+	--tf-paper: oklch(98.5% 0.004 220);
+	--tf-paper-2: oklch(95.5% 0.007 220);
+	--tf-rule: oklch(89.5% 0.01 220);
+	--tf-ink: oklch(20% 0.03 255);
+	--tf-fog: oklch(44% 0.025 245);
+	--tf-teal: oklch(52% 0.14 168);
+	--tf-display: Arial, sans-serif;
+	--tf-body: Arial, sans-serif;
+	--tf-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+html,
+body {
+	overflow-x: clip;
+}
+
+body:has(.login) {
+	background: var(--tf-paper);
+	color: var(--tf-ink);
+}
+
+.login {
+	width: min(29rem, calc(100vw - 2rem));
+	margin: clamp(3rem, 12vh, 8rem) auto 4rem;
+	padding: 0;
+	text-align: center;
+	color: var(--tf-ink);
+}
+
+.login__brand {
+	margin: 0 0 3.5rem;
+	text-align: center;
+}
+
+.tf-admin-logo {
+	display: inline-flex;
+	align-items: baseline;
+	font-family: var(--tf-display);
+	font-size: 1.3rem;
+	font-weight: 700;
+	letter-spacing: -0.055em;
+}
+
+.tf-admin-logo strong {
+	color: var(--tf-teal);
+	font-weight: 700;
+}
+
+.tf-admin-quote {
+	margin: 0.65rem 0 0;
+	color: var(--tf-fog);
+	font-family: var(--tf-body);
+	font-size: 0.78rem;
+	font-style: italic;
+}
+
+.login__form {
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	text-align: left;
+}
+
+.login__form h1,
+.login__form h2 {
+	font-family: var(--tf-body);
+	font-weight: 700;
+	letter-spacing: -0.04em;
+}
+
+.login__form label {
+	color: var(--tf-ink);
+	font-family: var(--tf-body);
+	font-size: 0.82rem;
+	font-weight: 500;
+}
+
+.login__form input {
+	min-height: 2.9rem;
+	border: 1px solid var(--tf-rule);
+	border-radius: 0;
+	background: var(--tf-paper-2);
+	color: var(--tf-ink);
+	font-family: var(--tf-body);
+}
+
+.login__form input:focus {
+	border-color: var(--tf-teal);
+	box-shadow: 0 0 0 1px var(--tf-teal);
+}
+
+.login__form button {
+	min-height: 2.9rem;
+	border: 0;
+	border-radius: 0;
+	background: var(--tf-teal);
+	color: var(--tf-paper);
+	font-family: var(--tf-mono);
+	font-size: 0.72rem;
+	font-weight: 500;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	transition: background 120ms ease, color 120ms ease;
+}
+
+.login__form button:hover {
+	background: var(--tf-ink);
+	color: var(--tf-paper);
+}
+
+.login__form a {
+	color: var(--tf-ink);
+	text-decoration-color: var(--tf-teal);
+	text-underline-offset: 0.2em;
+}
+
+.login__form a:hover {
+	color: var(--tf-teal);
+}
+
+@media (max-width: 40rem) {
+	.login {
+		margin-top: 2rem;
+	}
+
+	.login__brand {
+		margin-bottom: 2.5rem;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.login__form button {
+		transition: none;
+	}
+}
