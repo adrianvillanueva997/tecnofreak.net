@@ -53,7 +53,7 @@ test.describe('Admin Panel', () => {
 
     await expect(page.getByRole('link', { name: 'Edit Post' })).toHaveAttribute(
       'href',
-      `/admin/collections/posts/${postID}`,
+      new URL(`/admin/collections/posts/${postID}`, page.url()).toString(),
     )
   })
 })
