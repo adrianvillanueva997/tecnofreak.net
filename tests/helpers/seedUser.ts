@@ -57,6 +57,7 @@ export async function seedTestPost(): Promise<number> {
     collection: 'posts',
     where: { slug: { equals: testPost.slug } },
     overrideAccess: true,
+    context: { disableRevalidate: true },
   })
 
   const post = await payload.create({
@@ -92,6 +93,7 @@ export async function seedTestPost(): Promise<number> {
     },
     draft: false,
     overrideAccess: true,
+    context: { disableRevalidate: true },
   })
 
   return post.id
@@ -104,5 +106,6 @@ export async function cleanupTestPost(): Promise<void> {
     collection: 'posts',
     where: { slug: { equals: testPost.slug } },
     overrideAccess: true,
+    context: { disableRevalidate: true },
   })
 }
